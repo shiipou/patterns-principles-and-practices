@@ -1,0 +1,67 @@
+name: Build & Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Needed for git-based date metadata
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Clone Quartz
+        run: git clone --depth 1 --branch v4 https://github.com/jackyzha0/quartz.git quartz-build
+
+      - name: Install Quartz dependencies
+        run: npm ci
+        working-directory: quartz-build
+
+      - name: Copy vault content
+        run: |
+          rm -rf quartz-build/content/*
+          cp -r patterns practices principles README.md LICENSE.md quartz-build/content/
+          mv quartz-build/content/README.md quartz-build/content/index.md
+
+      - name: Apply Quartz configuration
+        run: |
+          cp quartz.config.ts quartz-build/quartz.config.ts
+          cp quartz.layout.ts quartz-build/quartz.layout.ts
+
+      - name: Build static site
+        run: npx quartz build
+        working-directory: quartz-build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: quartz-build/public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
