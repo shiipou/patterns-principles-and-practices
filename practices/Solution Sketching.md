@@ -41,3 +41,18 @@ Sans solution sketching, l'équipe fonce directement dans le code. Deux dévelop
 Autre cas classique : on développe une fonctionnalité pendant deux semaines, on la montre au product owner, et la réponse est "ce n'est pas du tout ce que j'avais en tête". Un croquis de 5 minutes sur un tableau blanc aurait évité deux semaines de travail perdu.
 
 Le sketching coûte quelques minutes. Le code mal orienté coûte des jours.
+
+## Liens avec les autres concepts
+
+**Pratiques proches :**
+- [Spiking](Spiking.md) — complémentaires. Le sketching explore visuellement ("à quoi ça ressemble ?"), le spike explore techniquement ("est-ce que ça marche ?"). Souvent, un sketch mène à un spike : on dessine l'architecture, puis on code un prototype pour valider.
+- [Pair Programming](Pair%20Programming.md) — le pairing commence souvent par un sketch à deux sur un tableau blanc. Le sketching est le préambule naturel du pairing sur un sujet complexe.
+- [Retrospective](Retrospective.md) — la rétro peut révéler qu'on fonce trop souvent dans le code sans prendre le temps de dessiner d'abord.
+
+**Principes liés :**
+- [YAGNI](../principles/You%20Aren't%20Gonna%20Need%20It%20(YAGNI).md) — le sketching aide à identifier ce qui est **vraiment nécessaire** avant de coder. Un croquis révèle vite les fonctionnalités superflues.
+- [KISS](../principles/Keep%20It%20Simple,%20Stupid%20(KISS).md) — comparer deux croquis d'architecture aide à choisir la solution la plus simple.
+- [Separation of Concerns](../principles/Separation%20of%20Concerns.md) — un schéma d'architecture rend la séparation des préoccupations **visible**. On voit immédiatement si une couche en fait trop.
+
+**Patterns :**
+- Le sketching est le meilleur moment pour décider quels [design patterns](../patterns/) utiliser. Dessiner les composants et leurs interactions révèle naturellement le besoin d'une [Facade](../patterns/Facade.md), d'un [Observer](../patterns/Observer.md) ou d'une [Factory](../patterns/Factory%20Method.md).

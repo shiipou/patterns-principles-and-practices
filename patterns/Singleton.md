@@ -78,3 +78,18 @@ System.out.println(configB.get("debug")); // false — incohérent !
 Deux instances lisent le même fichier mais ne partagent pas leur état en mémoire. L'une active le mode debug, l'autre ne le voit pas. Le même problème se pose pour un pool de connexions (on crée plusieurs pools au lieu d'un seul) ou un logger (les logs partent dans des fichiers différents).
 
 Avec le Singleton, `AppConfig.getInstance()` retourne toujours la même instance. Tout le monde partage le même état.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Abstract Factory](Abstract%20Factory.md) / [Facade](Facade.md) — souvent implémentés comme des Singletons, puisqu'on n'a besoin que d'une seule fabrique ou d'une seule façade par sous-système.
+
+**Tensions avec les principes :**
+- [Dependency Inversion](../principles/Dependency%20Inversion.md) — le Singleton crée un **état global** accessible partout via `getInstance()`. C'est l'opposé de l'injection de dépendances. Le code qui appelle `AppConfig.getInstance()` est couplé à la classe concrète, impossible à mocker en test.
+- [Loose Coupling](../principles/Loose%20Coupling.md) — le Singleton couple tout le code à une instance unique et concrète. Chaque appel à `getInstance()` crée une dépendance cachée.
+- [Encapsulation](../principles/Encapsulation.md) — paradoxalement, le Singleton encapsule l'unicité de l'instance (constructeur privé), mais expose un état global.
+
+**Pratiques impactées :**
+- [Automated Testing](../practices/Automated%20Testing.md) — les Singletons rendent les tests difficiles : on ne peut pas remplacer l'instance par un mock, et l'état persiste entre les tests.
+
+**Point de vigilance :** le Singleton est souvent considéré comme un **anti-pattern** quand il est utilisé pour partager de l'état global. Dans la plupart des cas, l'injection de dépendances (Dependency Inversion) est une meilleure alternative : on crée l'instance une seule fois et on l'injecte là où c'est nécessaire, sans couplage global.

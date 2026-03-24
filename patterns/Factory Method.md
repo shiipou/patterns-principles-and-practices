@@ -98,3 +98,17 @@ class DocumentService {
 Chaque nouveau type de document oblige à modifier cette méthode (violation du Open/Closed). La logique de création est mélangée avec la logique métier, et tester `DocumentService` sans instancier de vrais `PdfDocument` est impossible.
 
 Avec le Factory Method, chaque type a sa propre factory. Ajouter un nouveau format = ajouter une classe, sans toucher au code existant.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Abstract Factory](Abstract%20Factory.md) — l'Abstract Factory utilise souvent des Factory Methods en interne. La différence : le Factory Method crée **un seul type** de produit, l'Abstract Factory crée des **familles entières** de produits liés.
+- [Template Method](Template%20Method.md) — même mécanique d'héritage. Le Template Method délègue des **étapes d'un algorithme** aux sous-classes, le Factory Method délègue la **création d'objets**. Souvent, un Template Method contient un Factory Method.
+- [Strategy](Strategy.md) — le Strategy utilise la **composition** pour varier le comportement, le Factory Method utilise l'**héritage**. Le Strategy est plus flexible (changement à l'exécution), le Factory Method est plus simple.
+
+**Principes appliqués :**
+- [Open/Closed](../principles/Open%20&%20Closed.md) — ajouter un nouveau type de produit = créer une nouvelle sous-classe, sans modifier le code existant.
+- [Dependency Inversion](../principles/Dependency%20Inversion.md) — le code client dépend de l'abstraction `Document`, pas des classes concrètes `PdfDocument` ou `HtmlDocument`.
+- [Single Responsibility](../principles/Single%20Responsibility.md) — la logique de création est séparée de la logique d'utilisation.
+
+**Différence clé avec l'Abstract Factory :** si tu n'as qu'**un seul type** de produit à créer (des documents, des notifications, des connexions…), le Factory Method suffit. Si tu as **plusieurs types liés** qui doivent être cohérents entre eux (chaise + table du même style), c'est l'Abstract Factory qu'il te faut.

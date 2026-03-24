@@ -58,3 +58,17 @@ public class UserController {
 50 lignes de configuration manuelle remplacées par deux annotations. Avec Spring Boot, le framework fait le reste tout seul.
 
 Sans conventions, chaque développeur de l'équipe structure aussi son projet différemment. On perd du temps à chercher où sont les choses au lieu de coder.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Keep It Simple, Stupid (KISS)](Keep%20It%20Simple,%20Stupid%20(KISS).md) — les conventions simplifient. Plutôt que de configurer chaque détail, on suit une norme et on se concentre sur le code métier. C'est KISS appliqué à la configuration.
+- [Don't Repeat Yourself (DRY)](Don't%20Repeat%20Yourself%20(DRY).md) — sans conventions, on répète la même configuration dans chaque projet. Les conventions centralisent les décisions récurrentes.
+- [You Aren't Gonna Need It (YAGNI)](You%20Aren't%20Gonna%20Need%20It%20(YAGNI).md) — les conventions évitent de configurer des choses dont on n'a pas besoin. On ne configure que ce qui déroge à la norme.
+
+**Tensions avec d'autres principes :**
+- [Separation of Concerns](Separation%20of%20Concerns.md) — les conventions peuvent masquer les responsabilités. Quand tout est implicite ("magie noire"), il est parfois difficile de voir qui fait quoi.
+
+**Pratiques liées :**
+- [Naming](../practices/Naming.md) — les conventions de nommage sont un cas spécifique de ce principe : si tout le monde nomme pareil, le code se comprend sans documentation.
+- [Code Reviewing](../practices/Code%20Reviewing.md) — les conventions facilitent les reviews : on vérifie la conformité aux conventions plutôt que de débattre de choix subjectifs.

@@ -55,3 +55,23 @@ class OrderService {
 Changer Gmail pour SendGrid ? Modifier `OrderService`. Changer Stripe pour PayPal ? Modifier `OrderService`. Tester sans envoyer de vrais emails ? Impossible. Cette classe est couplée à 3 implémentations concrètes.
 
 Avec un faible couplage, `OrderService` dépend d'interfaces (`Database`, `EmailSender`, `PaymentGateway`). On peut changer l'implémentation, mocker pour les tests, ou remplacer un fournisseur sans toucher à la logique métier.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [High Cohesion](High%20Cohesion.md) — les deux vont **toujours** de pair. Des modules hautement cohésifs (chacun fait une chose) sont naturellement faiblement couplés (moins de raisons de dépendre des autres). Quand on voit du fort couplage, c'est souvent un symptôme de faible cohésion.
+- [Dependency Inversion](Dependency%20Inversion.md) — la DI est le **mécanisme principal** pour obtenir un couplage lâche. Dépendre d'interfaces plutôt que de classes concrètes, c'est du découplage par définition.
+- [Abstraction](Abstraction.md) — les abstractions (interfaces) sont l'outil qui crée le découplage. Sans interface, les modules sont directement couplés aux implémentations.
+- [Separation of Concerns](Separation%20of%20Concerns.md) — séparer les préoccupations réduit le couplage : chaque module ne s'occupe que de son sujet et communique avec les autres via des interfaces.
+- [Encapsulation](Encapsulation.md) — en cachant les détails internes, l'encapsulation réduit les points de couplage : le code extérieur ne dépend que de l'API publique.
+
+**Patterns qui créent du couplage lâche :**
+- [Observer](../patterns/Observer.md) — c'est **le** pattern du découplage. Le sujet ne connaît que l'interface `Observer`.
+- [Strategy](../patterns/Strategy.md) — le contexte est découplé de l'algorithme concret.
+- [Adapter](../patterns/Adapter.md) — découple le code client d'une librairie concrète.
+- [Facade](../patterns/Facade.md) — découple le client de la complexité d'un sous-système.
+
+**Tension avec le [Singleton](../patterns/Singleton.md) :** le Singleton crée du couplage fort — chaque appel à `getInstance()` est une dépendance cachée vers une classe concrète.
+
+**Pratiques liées :**
+- [Automated Testing](../practices/Automated%20Testing.md) — le couplage lâche rend le code testable. Si les modules sont couplés, tester l'un oblige à instancier tous les autres.

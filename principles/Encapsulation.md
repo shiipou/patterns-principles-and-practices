@@ -68,3 +68,19 @@ account.owner = "";       // Propriétaire vide — pas de validation
 N'importe quel bout de code peut mettre le solde à -5000 ou vider le nom du propriétaire. Il n'y a aucune règle métier, aucun contrôle. Le jour où on veut ajouter une validation, il faut retrouver tous les endroits qui modifient `balance` directement.
 
 Avec l'encapsulation, `balance` est privé et passe par `withdraw()` / `deposit()` qui vérifient les règles. Impossible de contourner la validation.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Abstraction](Abstraction.md) — complémentaires. L'abstraction définit **ce qu'on expose** (le contrat public), l'encapsulation définit **ce qu'on protège** (les données internes). L'abstraction choisit le bon niveau de détail, l'encapsulation empêche le contournement de ce niveau.
+- [Single Responsibility](Single%20Responsibility.md) — un objet bien encapsulé a naturellement une responsabilité claire : il gère ses propres données et les règles associées.
+- [High Cohesion](High%20Cohesion.md) — l'encapsulation regroupe les données et les méthodes qui les manipulent. C'est la cohésion à l'échelle de la classe.
+- [Loose Coupling](Loose%20Coupling.md) — en cachant les détails internes, l'encapsulation réduit le couplage : le code extérieur ne dépend que de l'interface publique, pas de la structure interne.
+
+**Patterns qui s'appuient sur l'encapsulation :**
+- [State](../patterns/State.md) — chaque état encapsule son propre comportement et ses transitions. Le contexte ne voit que l'interface `State`.
+- [Facade](../patterns/Facade.md) — la Facade encapsule les interactions complexes entre sous-systèmes derrière une API simple.
+- [Decorator](../patterns/Decorator.md) — chaque décorateur encapsule un comportement supplémentaire sans exposer les détails des couches en dessous.
+
+**Pratiques liées :**
+- [Naming](../practices/Naming.md) — les noms des méthodes publiques (`withdraw`, `deposit`) révèlent l'**intention**, pas l'implémentation. C'est l'encapsulation au niveau du langage.

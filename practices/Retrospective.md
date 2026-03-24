@@ -48,3 +48,21 @@ Sans rétrospective, l'équipe répète les mêmes erreurs sprint après sprint.
 Personne ne prend le temps de se poser la question : "Qu'est-ce qu'on pourrait changer ?" Les frustrations s'accumulent en silence, les problèmes deviennent "normaux", et l'équipe stagne.
 
 La rétro est le mécanisme qui transforme les erreurs en améliorations. Sans elle, il n'y a pas de boucle de feedback.
+
+## Liens avec les autres concepts
+
+**Pratiques proches :**
+- Toutes les autres pratiques — la rétro est une **méta-pratique**. C'est le moment où on évalue si les autres pratiques fonctionnent :
+  - "Les [reviews](Code%20Reviewing.md) sont trop lentes" → action : limiter les PRs à 300 lignes
+  - "On n'a pas assez de [tests](Automated%20Testing.md)" → action : imposer une couverture minimale
+  - "Le [pairing](Pair%20Programming.md) est épuisant" → action : alterner avec du travail solo
+  - "On passe du temps sur des features inutiles" → action : appliquer [YAGNI](../principles/You%20Aren't%20Gonna%20Need%20It%20(YAGNI).md)
+
+- [Code Reviewing](Code%20Reviewing.md) — si les reviews posent problème (trop lentes, superficielles, conflictuelles), c'est un sujet de rétro.
+- [Pair Programming](Pair%20Programming.md) — la rétro est le moment d'ajuster les pratiques de pairing.
+- [Solution Sketching](Solution%20Sketching.md) — la rétro peut révéler qu'on fonce trop vite dans le code sans dessiner d'abord.
+
+**Principes liés :**
+- La rétro est le mécanisme qui détecte les violations de principes au niveau de l'équipe. "On répète toujours le même code" → [DRY](../principles/Don't%20Repeat%20Yourself%20(DRY).md). "Nos classes sont trop grosses" → [SRP](../principles/Single%20Responsibility.md). "On a codé 3 features inutiles" → [YAGNI](../principles/You%20Aren't%20Gonna%20Need%20It%20(YAGNI).md).
+
+**Rôle unique :** la rétro est la seule pratique qui s'améliore **elle-même**. Si la rétro ne fonctionne pas, c'est un sujet… de rétro.

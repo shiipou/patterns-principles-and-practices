@@ -77,3 +77,21 @@ class UserService {
 Changer de base de données ? Modifier `UserService`. Changer de service mail ? Modifier `UserService`. Changer le format de log ? Modifier `UserService`. Quatre raisons de changer = quatre chances de casser quelque chose à chaque modification.
 
 Avec le SRP, chaque responsabilité est dans sa propre classe. Une modification n'impacte que la classe concernée.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Separation of Concerns](Separation%20of%20Concerns.md) — même idée, échelle différente. Le SRP s'applique à la **classe** ("une seule raison de changer"), la Separation of Concerns s'applique au **système** (séparer présentation, métier, données). Respecter le SRP dans chaque classe, c'est appliquer la Separation of Concerns au niveau micro.
+- [High Cohesion](High%20Cohesion.md) — le SRP mène naturellement à la haute cohésion. Une classe avec une seule responsabilité a des éléments étroitement liés. La différence : le SRP regarde les **raisons de changer**, la cohésion regarde le **degré de relation** entre les éléments.
+- [Don't Repeat Yourself (DRY)](Don't%20Repeat%20Yourself%20(DRY).md) — extraire une logique dupliquée dans sa propre classe, c'est appliquer DRY et SRP à la fois.
+- [Loose Coupling](Loose%20Coupling.md) — des classes avec une seule responsabilité ont moins de raisons de dépendre d'autres classes. SRP réduit le couplage.
+
+**Patterns qui appliquent ce principe :**
+- [Decorator](../patterns/Decorator.md) — chaque décorateur n'a qu'**une seule** responsabilité (email, log, retry...). C'est ce qui rend la composition possible.
+- [Strategy](../patterns/Strategy.md) — chaque stratégie a une seule responsabilité : implémenter un algorithme spécifique.
+- [State](../patterns/State.md) — chaque classe d'état ne gère que le comportement propre à cet état.
+- [Factory Method](../patterns/Factory%20Method.md) — sépare la logique de création de la logique d'utilisation.
+
+**Pratiques liées :**
+- [Code Reviewing](../practices/Code%20Reviewing.md) — les reviews sont le moment idéal pour détecter les classes qui portent trop de casquettes.
+- [Naming](../practices/Naming.md) — si tu ne trouves pas un bon nom pour ta classe ("Manager", "Helper", "Utils"), c'est probablement qu'elle a trop de responsabilités.

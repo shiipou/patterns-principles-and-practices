@@ -97,3 +97,19 @@ class Navigator {
 La classe `Navigator` grossit à chaque nouveau mode de transport. Modifier l'algo vélo risque de casser celui de la voiture (même méthode). Et il est impossible de tester un algorithme sans instancier tout le `Navigator`.
 
 Avec Strategy, chaque algorithme est une classe isolée. On peut les tester, les modifier et en ajouter indépendamment.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [State](State.md) — structure quasi identique, mais le Strategy est **choisi par le client** ("utilise l'algo vélo"), tandis que le State **change automatiquement** selon l'état interne de l'objet. Le Strategy est un choix conscient, le State est une machine à états.
+- [Template Method](Template%20Method.md) — les deux gèrent des variations d'algorithme, mais le Template Method utilise l'**héritage** (la classe parente fixe le squelette), tandis que le Strategy utilise la **composition** (on injecte l'algorithme). Le Strategy est plus flexible : on peut changer d'algorithme à l'exécution.
+- [Decorator](Decorator.md) — le Decorator **empile** des comportements (email + SMS + log), le Strategy **substitue** un algorithme par un autre (voiture OU vélo). Le Decorator est additif, le Strategy est alternatif.
+
+**Principes appliqués :**
+- [Open/Closed](../principles/Open%20&%20Closed.md) — ajouter une nouvelle stratégie (`ScooterRoute`) ne modifie ni le `Navigator` ni les stratégies existantes.
+- [Dependency Inversion](../principles/Dependency%20Inversion.md) — le `Navigator` dépend de l'interface `RouteStrategy`, pas des classes concrètes.
+- [Loose Coupling](../principles/Loose%20Coupling.md) — le contexte et les stratégies sont indépendants, reliés uniquement par l'interface.
+- [Single Responsibility](../principles/Single%20Responsibility.md) — chaque stratégie a une seule responsabilité : calculer un type d'itinéraire.
+
+**Pratiques liées :**
+- [Automated Testing](../practices/Automated%20Testing.md) — chaque stratégie est testable en isolation, sans instancier le `Navigator`.

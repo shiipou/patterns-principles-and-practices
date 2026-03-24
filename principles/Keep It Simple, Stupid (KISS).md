@@ -53,3 +53,19 @@ if (email == null || email.isEmpty()) {
 Un framework de validation générique avec pipeline, contexte et agrégateur… pour vérifier qu'un champ n'est pas vide. Le code est plus complexe à lire, à débugger et à maintenir que le problème qu'il est censé résoudre.
 
 La solution simple fait le job. On complexifiera *si* et *quand* le besoin se présentera.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [You Aren't Gonna Need It (YAGNI)](You%20Aren't%20Gonna%20Need%20It%20(YAGNI).md) — KISS dit "garde ça simple", YAGNI dit "ne fais pas ce qui n'est pas demandé". Les deux convergent : ne pas anticiper des besoins imaginaires, c'est garder le système simple.
+- [Premature Optimization](Premature%20Optimization.md) — optimiser trop tôt viole KISS. On complexifie le code pour des gains non mesurés. KISS dit : écris du code clair d'abord, optimise ensuite si nécessaire.
+- [Convention over configuration](Convention%20over%20configuration.md) — les conventions sont KISS appliqué à la configuration : plutôt que de configurer chaque détail, on suit une norme simple.
+
+**Tensions avec d'autres concepts :**
+- Tous les [design patterns](../patterns/) — chaque pattern ajoute de la complexité (interfaces, classes supplémentaires). KISS ne dit pas "jamais de pattern" mais "pas de pattern si un `if` suffit". Un [Strategy](../patterns/Strategy.md) pour 2 cas stables est du sur-engineering. Pour 10 cas qui évoluent, c'est justifié.
+- [Abstraction](Abstraction.md) — trop d'abstraction tue la simplicité. 5 niveaux d'interfaces pour un seul cas d'usage concret, c'est une violation de KISS.
+- [Open/Closed](Open%20&%20Closed.md) — rendre tout extensible "au cas où" ajoute de la complexité sans valeur immédiate.
+
+**Pratiques liées :**
+- [Solution Sketching](../practices/Solution%20Sketching.md) — dessiner avant de coder aide à trouver la solution la plus simple.
+- [Code Reviewing](../practices/Code%20Reviewing.md) — un reviewer peut pointer qu'une solution est trop complexe pour le problème posé.

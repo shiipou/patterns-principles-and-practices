@@ -94,3 +94,16 @@ class TeaMaker {
 `boilWater()` et `pourInCup()` sont copiés-collés dans chaque classe. Si la logique de `boilWater()` change (nouvelle température, timer, log), il faut modifier chaque maker. Et rien ne garantit que toutes les classes respectent le même ordre d'étapes.
 
 Avec le Template Method, la classe abstraite fixe le squelette (`prepare()` est `final`) et les sous-classes ne redéfinissent que les étapes spécifiques. Le code commun vit à un seul endroit.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Strategy](Strategy.md) — les deux gèrent des variations d'algorithme, mais par des mécanismes opposés. Le Template Method utilise l'**héritage** : la classe parente contrôle le flux et les sous-classes remplissent les trous. Le Strategy utilise la **composition** : on injecte l'algorithme de l'extérieur. Le Strategy est plus flexible (changement à l'exécution), le Template Method est plus structurant (l'ordre des étapes est garanti).
+- [Factory Method](Factory%20Method.md) — même mécanique d'héritage. Un Template Method appelle souvent un Factory Method pour créer les objets dont il a besoin dans certaines étapes.
+
+**Principes appliqués :**
+- [Don't Repeat Yourself (DRY)](../principles/Don't%20Repeat%20Yourself%20(DRY).md) — c'est **le** pattern anti-duplication. Le code commun (`boilWater`, `pourInCup`) vit une seule fois dans la classe parente, au lieu d'être copié dans chaque sous-classe.
+- [Open/Closed](../principles/Open%20&%20Closed.md) — on ajoute de nouvelles boissons (nouvelles sous-classes) sans modifier la classe abstraite ni les sous-classes existantes.
+- [Separation of Concerns](../principles/Separation%20of%20Concerns.md) — la structure de l'algorithme (le "quoi" et le "quand") est séparée des détails d'implémentation (le "comment").
+
+**Différence clé avec le Strategy :** si l'**ordre des étapes doit être garanti** et que seuls les détails de certaines étapes varient, c'est le Template Method. Si l'**algorithme entier** doit pouvoir être remplacé librement, c'est le Strategy.

@@ -127,3 +127,16 @@ Problèmes :
 - La logique de sélection (les `if/else`) est dupliquée dans chaque méthode
 
 Avec l'Abstract Factory, on choisit une factory (`OfficeFactory` ou `HomeFactory`) et tous les objets créés sont automatiquement de la même famille. Impossible de mélanger.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Factory Method](Factory%20Method.md) — variante plus simple qui ne crée qu'un seul type de produit à la fois. L'Abstract Factory crée des **familles entières** d'objets liés. En pratique, chaque méthode d'une Abstract Factory est souvent un Factory Method.
+- [Strategy](Strategy.md) — même principe de polymorphisme pour éviter les `if/else`, mais appliqué aux algorithmes plutôt qu'à la création d'objets.
+
+**Principes appliqués :**
+- [Open/Closed](../principles/Open%20&%20Closed.md) — on ajoute une nouvelle famille (ex. `GardenFurnitureFactory`) sans modifier le code existant.
+- [Dependency Inversion](../principles/Dependency%20Inversion.md) — le code client dépend des interfaces (`FurnitureFactory`, `Chair`, `Table`), jamais des classes concrètes.
+- [Abstraction](../principles/Abstraction.md) — les interfaces de fabrique et de produits cachent les détails d'implémentation derrière des contrats clairs.
+
+**Différence clé avec le Factory Method :** le Factory Method délègue la création d'**un seul produit** via l'héritage. L'Abstract Factory délègue la création d'**une famille de produits liés** via la composition. Si tes produits doivent être cohérents entre eux (chaise bureau + table bureau), c'est l'Abstract Factory. Si tu n'as qu'un seul type de produit, le Factory Method suffit.

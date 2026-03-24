@@ -140,3 +140,16 @@ class MusicPlayer {
 Chaque méthode duplique le même switch sur l'état. Ajouter un nouvel état ("buffering", "recording") oblige à modifier **toutes** les méthodes. À 5 états et 6 méthodes, on a 30 blocs conditionnels à maintenir — et un seul oubli crée un bug.
 
 Avec le pattern State, chaque état est une classe. Ajouter un état = ajouter une classe, sans toucher aux autres.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Strategy](Strategy.md) — structure quasi identique (interface + implémentations + contexte), mais l'intention est différente. Le Strategy est **choisi explicitement** par le code client ("je veux l'algo vélo"). Le State **change automatiquement** en interne ("quand on appuie sur play en pause, on passe en lecture"). Le Strategy est un choix externe, le State est une machine à états interne.
+- [Observer](Observer.md) — les deux se combinent bien : un changement d'état (State) peut déclencher des notifications (Observer) vers d'autres composants.
+
+**Principes appliqués :**
+- [Open/Closed](../principles/Open%20&%20Closed.md) — ajouter un nouvel état ("Buffering") = créer une nouvelle classe, sans modifier les états existants.
+- [Single Responsibility](../principles/Single%20Responsibility.md) — chaque classe d'état ne gère que le comportement propre à cet état. `PlayingState` ne sait rien de ce qui se passe quand on est arrêté.
+- [Encapsulation](../principles/Encapsulation.md) — les transitions et comportements sont encapsulés dans chaque état. Le contexte (`MusicPlayer`) n'a aucune logique conditionnelle.
+
+**Différence clé avec le Strategy :** si le comportement change en fonction d'un **choix externe** (l'utilisateur choisit un mode), c'est un Strategy. Si le comportement change en fonction de l'**état interne** de l'objet (et que les transitions sont automatiques), c'est un State.

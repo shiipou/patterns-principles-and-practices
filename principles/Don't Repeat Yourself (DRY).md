@@ -73,3 +73,20 @@ class InvoiceService {
 Le jour où la TVA passe à 21%, il faut retrouver **tous** les endroits où `1.20` apparaît. Et on en oublie toujours un. Le bug ne sera découvert que quand un client recevra une facture incohérente.
 
 Avec DRY, un seul `PricingService.calculateTotal()` est appelé partout. Un changement = un seul endroit à modifier.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Single Responsibility](Single%20Responsibility.md) — très liés. DRY dit "une seule source de vérité", SRP dit "une seule raison de changer". Extraire une logique dupliquée dans sa propre classe, c'est appliquer les deux à la fois.
+- [High Cohesion](High%20Cohesion.md) — factoriser le code dupliqué amène naturellement à regrouper les fonctionnalités liées. DRY pousse vers la cohésion.
+- [Abstraction](Abstraction.md) — DRY pousse à abstraire : on extrait un concept commun (le calcul de prix, le taux de TVA) dans une abstraction réutilisable.
+
+**Tensions avec d'autres principes :**
+- [Loose Coupling](Loose%20Coupling.md) — attention : éliminer **toute** duplication peut créer du **couplage artificiel**. Si deux modules se ressemblent par hasard mais n'ont pas la même raison de changer, les factoriser ensemble les rend dépendants l'un de l'autre. Parfois, un peu de duplication est préférable à un mauvais couplage.
+
+**Patterns qui appliquent DRY :**
+- [Template Method](../patterns/Template%20Method.md) — c'est **le** pattern anti-duplication. Le code commun (`boilWater`, `pourInCup`) vit une seule fois dans la classe parente.
+- [Strategy](../patterns/Strategy.md) — au lieu de dupliquer des `if/else` partout, on factorise chaque algorithme dans sa propre classe.
+
+**Pratiques liées :**
+- [Code Reviewing](../practices/Code%20Reviewing.md) — les reviews sont le meilleur moment pour détecter la duplication. Un reviewer voit souvent des patterns que l'auteur ne remarque plus.

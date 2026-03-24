@@ -59,3 +59,19 @@ public List<OrderDTO> getOrders() {
 La page met 5 secondes à charger et personne ne sait pourquoi. Un profiler aurait montré immédiatement que 99% du temps est passé dans les requêtes SQL.
 
 Mesurer avant d'optimiser — et optimiser au bon endroit.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Premature Optimization](../principles/Premature%20Optimization.md) — complémentaires mais opposés dans le timing. Le principe dit **quand ne pas** optimiser (tant qu'on n'a pas mesuré). Cette pratique dit **comment** optimiser (profiler, cibler, mesurer à nouveau). L'un sans l'autre est dangereux : optimiser sans mesurer (prématuré) ou ne jamais optimiser (négligence).
+- [KISS](../principles/Keep%20It%20Simple,%20Stupid%20(KISS).md) — chaque optimisation ajoute de la complexité (cache, parallélisme, lazy loading). Il faut toujours mettre en balance le gain de performance et la perte de lisibilité.
+
+**Pratiques liées :**
+- [Automated Testing](Automated%20Testing.md) — les tests de charge (JMeter, Locust) sont des tests automatisés dédiés à la performance. Les tests de régression garantissent qu'une optimisation n'a pas cassé le comportement.
+- [Spiking](Spiking.md) — quand on hésite entre deux approches d'optimisation (cache vs index vs parallélisme), un spike permet de mesurer rapidement laquelle est la plus efficace.
+- [Code Reviewing](Code%20Reviewing.md) — un reviewer peut repérer des problèmes de performance (N+1, allocations excessives) ou au contraire signaler une optimisation prématurée.
+
+**Patterns utiles pour la performance :**
+- [Singleton](../patterns/Singleton.md) — un pool de connexions ou un cache sont souvent des Singletons (une seule instance partagée).
+- [Facade](../patterns/Facade.md) — une Facade peut agréger plusieurs appels en un seul pour réduire les aller-retours réseau.
+- [Decorator](../patterns/Decorator.md) — un décorateur de cache peut être ajouté autour d'un service sans modifier le service lui-même.

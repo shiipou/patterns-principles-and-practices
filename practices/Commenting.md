@@ -79,3 +79,17 @@ Thread.sleep(300);
 ```
 
 Un commentaire obsolète est pire que pas de commentaire — il induit en erreur. Un commentaire qui répète le code est du bruit. Le bon commentaire explique ce que le code ne peut pas dire : l'intention, le contexte, le piège.
+
+## Liens avec les autres concepts
+
+**Pratiques proches :**
+- [Naming](Naming.md) — complémentaires et souvent opposés. Un bon nommage **élimine** le besoin de commentaires. Si `calculateSum(numbers)` est clair, le commenter est inutile. Si tu commentes beaucoup, c'est peut-être que tes noms ne sont pas assez expressifs.
+- [Code Reviewing](Code%20Reviewing.md) — la review est le moment idéal pour détecter les commentaires inutiles, mensongers ou manquants. "Ce commentaire n'est plus à jour" est un feedback de review classique.
+
+**Principes liés :**
+- [KISS](../principles/Keep%20It%20Simple,%20Stupid%20(KISS).md) — un code simple n'a pas besoin de commentaires. Si tu dois écrire un paragraphe pour expliquer ce que fait un bloc, c'est que le code est trop compliqué — simplifie le code, pas le commentaire.
+- [Abstraction](../principles/Abstraction.md) — une bonne abstraction révèle l'intention sans qu'on ait besoin de commenter. `paymentGateway.charge(amount)` n'a pas besoin de commentaire.
+- [Encapsulation](../principles/Encapsulation.md) — les méthodes bien encapsulées (`withdraw()`, `deposit()`) portent leur intention dans leur nom. Les commentaires servent pour le **pourquoi**, pas le **quoi**.
+
+**Le piège du "commentaire pansement" :**
+Si tu te retrouves à commenter du code pour le rendre compréhensible, applique plutôt [Naming](Naming.md) (meilleurs noms), [Single Responsibility](../principles/Single%20Responsibility.md) (découper la classe) ou [Abstraction](../principles/Abstraction.md) (extraire une méthode bien nommée). Le commentaire doit être le **dernier recours**, pas le premier réflexe.

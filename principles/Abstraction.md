@@ -68,3 +68,16 @@ class ReportService {
 Le jour où on veut passer à PostgreSQL, il faut modifier `ReportService` — alors que la logique de génération du rapport n'a rien à voir avec le choix de la base de données.
 
 Avec une abstraction (`Database` ou `DataSource`), `ReportService` ne connaît que l'interface. On change de base sans toucher au rapport.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Encapsulation](Encapsulation.md) — complémentaires mais différents. L'abstraction définit **ce qu'on expose** (l'interface publique), l'encapsulation définit **ce qu'on cache** (les détails internes). L'abstraction choisit le bon niveau de détail, l'encapsulation protège les données derrière ce niveau.
+- [Dependency Inversion](Dependency%20Inversion.md) — le Dependency Inversion dit "dépends d'abstractions, pas de concrétions". L'abstraction est le mécanisme qui rend ça possible : sans interfaces ni classes abstraites, pas d'inversion de dépendance.
+- [Loose Coupling](Loose%20Coupling.md) — l'abstraction est le principal levier pour obtenir un couplage lâche. En dépendant d'une interface plutôt que d'une classe concrète, on découple les modules.
+- [Open/Closed](Open%20&%20Closed.md) — les abstractions (interfaces) permettent d'étendre le système sans modifier le code existant.
+
+**Patterns qui s'appuient sur l'abstraction :**
+- [Strategy](../patterns/Strategy.md), [Observer](../patterns/Observer.md), [Factory Method](../patterns/Factory%20Method.md), [Abstract Factory](../patterns/Abstract%20Factory.md), [Adapter](../patterns/Adapter.md) — tous ces patterns reposent sur des interfaces pour découpler le code client des implémentations concrètes.
+
+**Point de vigilance :** trop d'abstraction nuit à la lisibilité. Si tu dois naviguer 5 interfaces pour comprendre ce que fait un appel, c'est qu'on a trop abstrait. Le principe [KISS](Keep%20It%20Simple,%20Stupid%20(KISS).md) rappelle qu'il faut abstraire uniquement quand c'est justifié.

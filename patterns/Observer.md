@@ -105,3 +105,17 @@ class TemperatureSensor {
 Chaque nouvel affichage oblige à modifier `TemperatureSensor` : ajouter un champ, ajouter un appel dans `setTemperature()`. Le capteur — qui ne devrait se soucier que de la température — connaît les détails de chaque affichage. Impossible d'ajouter un nouvel observateur sans recompiler le capteur.
 
 Avec l'Observer, le capteur ne connaît qu'une interface `Observer`. N'importe quel objet peut s'abonner ou se désabonner à tout moment, sans que le capteur n'en sache rien.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Strategy](Strategy.md) — les deux utilisent le polymorphisme et des interfaces, mais le Strategy est une relation **1-vers-1** (un contexte utilise une stratégie), tandis que l'Observer est une relation **1-vers-N** (un sujet notifie plusieurs observateurs).
+- [State](State.md) — le State change l'état interne d'un objet, ce qui peut déclencher des notifications Observer. Les deux patterns se combinent bien : un changement d'état notifie les observateurs.
+
+**Principes appliqués :**
+- [Loose Coupling](../principles/Loose%20Coupling.md) — c'est **le** pattern du couplage lâche. Le sujet ne connaît que l'interface `Observer`, pas les implémentations concrètes. Ajouter ou retirer un observateur ne modifie rien au sujet.
+- [Open/Closed](../principles/Open%20&%20Closed.md) — on ajoute de nouveaux observateurs sans toucher au code du sujet.
+- [Separation of Concerns](../principles/Separation%20of%20Concerns.md) — le sujet s'occupe de son état, chaque observateur s'occupe de sa réaction. Le capteur de température ne sait rien de l'affichage.
+
+**Pratiques liées :**
+- [Automated Testing](../practices/Automated%20Testing.md) — les observateurs sont faciles à tester en isolation puisqu'ils ne dépendent que d'une interface simple (`update`).

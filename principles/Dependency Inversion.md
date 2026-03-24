@@ -90,3 +90,22 @@ class OrderService {
 Comment tester `placeOrder()` sans une vraie base MySQL et un vrai compte Stripe ? Impossible. Le code métier est collé aux implémentations concrètes.
 
 Avec l'inversion de dépendance, `OrderService` dépend d'interfaces (`Database`, `PaymentGateway`). En test, on injecte des mocks. En prod, on injecte les vraies implémentations. Le code métier ne change pas.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Abstraction](Abstraction.md) — la Dependency Inversion **nécessite** des abstractions (interfaces) pour fonctionner. Sans interface `Service`, on ne peut pas inverser la dépendance. L'abstraction est le mécanisme, la DI est le principe qui dit de l'utiliser.
+- [Loose Coupling](Loose%20Coupling.md) — la DI est le **principal levier** pour obtenir un couplage lâche. En dépendant d'interfaces plutôt que de classes concrètes, les modules deviennent interchangeables.
+- [Open/Closed](Open%20&%20Closed.md) — grâce à la DI, on peut ajouter de nouvelles implémentations sans modifier le code client. Les deux principes se renforcent mutuellement.
+- [Single Responsibility](Single%20Responsibility.md) — la DI encourage à séparer les responsabilités : la création des objets est séparée de leur utilisation.
+
+**Patterns qui appliquent ce principe :**
+- [Strategy](../patterns/Strategy.md) — le contexte dépend de l'interface `Strategy`, pas de l'implémentation concrète.
+- [Observer](../patterns/Observer.md) — le sujet dépend de l'interface `Observer`, pas des observateurs concrets.
+- [Factory Method](../patterns/Factory%20Method.md) / [Abstract Factory](../patterns/Abstract%20Factory.md) — les factories permettent de créer des objets sans coupler le code client aux classes concrètes.
+- [Adapter](../patterns/Adapter.md) — l'adaptateur implémente l'interface attendue et découple le client de la librairie concrète.
+
+**Pratiques liées :**
+- [Automated Testing](../practices/Automated%20Testing.md) — la DI rend le code **testable**. Sans elle, impossible de mocker les dépendances. C'est souvent le premier bénéfice concret que les développeurs ressentent.
+
+**Tension avec le [Singleton](../patterns/Singleton.md) :** le Singleton crée un accès global (`getInstance()`), ce qui est l'opposé de l'injection de dépendances. Privilégier l'injection par constructeur au Singleton.

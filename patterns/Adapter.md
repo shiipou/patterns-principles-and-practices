@@ -93,3 +93,16 @@ class ReportGenerator {
 Le jour où on veut passer à `NewJsonParser`, il faut réécrire toute la classe `ReportGenerator` — chaque appel à `readXml`, `findNodes`, `getAttr` doit être remplacé. Et si d'autres classes utilisent aussi `OldXmlParser`, c'est le même travail partout.
 
 Avec un Adapter, on crée une couche de traduction entre l'interface qu'on attend (`FileReader`) et la librairie réelle. Le jour où on change de lib, on remplace un seul adaptateur — le reste du code ne bouge pas.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Facade](Facade.md) — les deux cachent de la complexité, mais la Facade simplifie l'accès à un **sous-système entier**, tandis que l'Adapter traduit **une interface** vers une autre. La Facade crée une nouvelle interface simplifiée, l'Adapter fait cohabiter deux interfaces existantes.
+- [Decorator](Decorator.md) — les deux wrappent un objet, mais le Decorator **garde la même interface** et ajoute du comportement, tandis que l'Adapter **change l'interface** sans ajouter de comportement.
+
+**Principes appliqués :**
+- [Open/Closed](../principles/Open%20&%20Closed.md) — on ajoute un adaptateur sans modifier les classes existantes.
+- [Loose Coupling](../principles/Loose%20Coupling.md) — l'Adapter découple le code client de l'implémentation concrète d'une librairie.
+- [Dependency Inversion](../principles/Dependency%20Inversion.md) — le code client dépend de l'interface `FileReader`, pas de la librairie concrète.
+
+**Différence clé avec la Facade :** l'Adapter résout un problème de **compatibilité** (deux interfaces qui ne matchent pas), la Facade résout un problème de **complexité** (un sous-système trop compliqué à utiliser directement).

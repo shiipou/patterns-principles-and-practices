@@ -63,3 +63,21 @@ public void transferMoney(Account from, Account to, double amount) {
 Un reviewer aurait immédiatement pointé l'absence de vérification de solde et le manque de transaction. Sans review, un seul développeur décide de la qualité du code, et les mauvaises habitudes s'installent sans que personne ne les voie.
 
 La code review n'est pas qu'un filet de sécurité : c'est aussi le moment où l'équipe partage ses connaissances et reste alignée sur les pratiques.
+
+## Liens avec les autres concepts
+
+**Principes qu'on vérifie en review :**
+- [Single Responsibility](../principles/Single%20Responsibility.md) — "cette classe a trop de responsabilités, il faudrait la découper" est un feedback classique de review.
+- [Don't Repeat Yourself (DRY)](../principles/Don't%20Repeat%20Yourself%20(DRY).md) — un reviewer voit souvent la duplication que l'auteur ne remarque plus. "Ce code est déjà dans `PricingService`" est un commentaire de review fréquent.
+- [KISS](../principles/Keep%20It%20Simple,%20Stupid%20(KISS).md) — "c'est trop complexe pour le problème posé" est un feedback précieux. Un reviewer détecte le sur-engineering.
+- [Open/Closed](../principles/Open%20&%20Closed.md) — "si on utilise une interface ici, on n'aura pas à modifier ce code la prochaine fois" — la review est le moment idéal pour suggérer des améliorations architecturales.
+
+**Pratiques liées :**
+- [Naming](Naming.md) — les noms mal choisis sautent aux yeux d'un reviewer extérieur. "Que fait `proc()` ?" force l'auteur à choisir un meilleur nom.
+- [Commenting](Commenting.md) — la review vérifie que les commentaires sont pertinents (pas de commentaires évidents, pas de commentaires mensongers).
+- [Automated Testing](Automated%20Testing.md) — "où sont les tests ?" est une question que chaque reviewer devrait poser. La review vérifie la présence et la qualité des tests.
+- [Pair Programming](Pair%20Programming.md) — le pair programming est une review en **temps réel**. Il détecte les problèmes encore plus tôt que la review classique (avant même le commit).
+- [Retrospective](Retrospective.md) — si les reviews posent problème (à la traîne, superficielles, conflictuelles), c'est un sujet à aborder en rétro.
+
+**Patterns détectés en review :**
+- Un reviewer peut suggérer l'utilisation d'un [Strategy](../patterns/Strategy.md) au lieu d'une chaîne de `if/else`, ou d'une [Facade](../patterns/Facade.md) pour simplifier un code client trop verbeux. La review est souvent le moment où les patterns émergent.

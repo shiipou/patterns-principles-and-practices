@@ -62,3 +62,18 @@ class Mgr {
 `Mgr` de quoi ? `lst` de quoi ? `proc` fait quoi ? `r` représente quoi ? 6 mois plus tard, même l'auteur ne sait plus ce que cette classe fait. Chaque développeur qui passe dessus doit lire tout le code pour reconstruire le contexte.
 
 Avec de bons noms, le code se lit comme une phrase et les commentaires deviennent superflus.
+
+## Liens avec les autres concepts
+
+**Pratiques proches :**
+- [Commenting](Commenting.md) — nommage et commentaires sont les deux faces de la même pièce. Un bon nom **remplace** un commentaire. `calculateSum(numbers)` n'a pas besoin de `// calcule la somme des nombres`. Le commentaire compense un mauvais nom, le bon nom élimine le besoin de commentaire.
+- [Code Reviewing](Code%20Reviewing.md) — les noms mal choisis sautent aux yeux d'un reviewer. "Que signifie `mgr` ?" — la review force à choisir des noms clairs.
+
+**Principes liés :**
+- [Encapsulation](../principles/Encapsulation.md) — les noms des méthodes publiques révèlent l'**intention** (`withdraw`, `deposit`), pas l'implémentation. C'est l'encapsulation exprimée par le langage.
+- [Single Responsibility](../principles/Single%20Responsibility.md) — si tu ne trouves pas un bon nom pour ta classe, c'est qu'elle fait trop de choses. Les noms vagues (`Manager`, `Helper`, `Utils`) sont un signal d'alarme : la classe a probablement trop de responsabilités.
+- [Convention over configuration](../principles/Convention%20over%20configuration.md) — les conventions de nommage (`getUserById`, `isActive`, `OrderService`) sont un cas spécifique de ce principe. Si tout le monde nomme pareil, le code se comprend sans documentation.
+- [Abstraction](../principles/Abstraction.md) — un bon nom abstrait les détails. `sendNotification()` plutôt que `openSmtpConnectionAndSendEmail()`. Le nom révèle le "quoi", pas le "comment".
+
+**Patterns :**
+- Les patterns eux-mêmes sont du naming : appeler une classe `FurnitureFactory` ou `NotifierDecorator` communique immédiatement son rôle à quelqu'un qui connaît les [design patterns](../patterns/).

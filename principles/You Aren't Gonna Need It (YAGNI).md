@@ -48,3 +48,18 @@ interface DataExporter {
 5 méthodes sur 6 ne seront jamais utilisées. Mais elles doivent quand même être implémentées, testées et maintenues. Et le jour où on aura vraiment besoin d'un export JSON, le besoin réel sera probablement différent de ce qu'on a imaginé.
 
 Avec YAGNI, on implémente l'export CSV. Point. Si le besoin d'un export JSON se confirme, on l'ajoutera à ce moment-là — avec une vraie compréhension du besoin.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Keep It Simple, Stupid (KISS)](Keep%20It%20Simple,%20Stupid%20(KISS).md) — YAGNI et KISS convergent : ne pas anticiper des besoins imaginaires garde le système simple. KISS dit "pas trop complexe", YAGNI dit "pas trop tôt".
+- [Premature Optimization](Premature%20Optimization.md) — optimiser avant d'avoir mesuré un vrai problème, c'est violer YAGNI appliqué à la performance. Même logique : résoudre les problèmes qui existent, pas ceux qu'on imagine.
+
+**Tensions avec d'autres principes :**
+- [Open/Closed](Open%20&%20Closed.md) — le Open/Closed encourage à prévoir les points d'extension. YAGNI dit "ne prévois pas ce qui n'est pas demandé". La clé : être ouvert à l'extension sur les **vrais** points de variation (ceux qu'on a déjà identifiés), pas sur tout.
+- [Abstraction](Abstraction.md) — créer une abstraction pour un cas d'usage qui n'existe pas encore, c'est du YAGNI. Abstraire ce qui varie déjà, c'est du bon sens.
+
+**Pratiques liées :**
+- [Spiking](../practices/Spiking.md) — quand on ne sait pas si une fonctionnalité est nécessaire ou faisable, un spike permet de valider avant de s'engager. YAGNI + Spiking = on ne code que ce qu'on a validé.
+- [Solution Sketching](../practices/Solution%20Sketching.md) — dessiner avant de coder aide à identifier ce qui est vraiment nécessaire et à éviter le sur-engineering.
+- [Retrospective](../practices/Retrospective.md) — la rétro est le moment où on constate qu'on a codé des choses inutiles et où on décide d'arrêter.

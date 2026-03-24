@@ -108,3 +108,19 @@ class OrderController {
 Ce même code est dupliqué dans `OrderController`, `MobileOrderController`, `ApiOrderController`… Si l'étape de paiement change, il faut modifier chaque controller. Et chaque controller doit connaître 5 services différents.
 
 Avec une Facade, tout ça tient en une ligne : `shoppingFacade.placeOrder(cart, payment, address)`. Le controller ne connaît qu'un seul point d'entrée.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Adapter](Adapter.md) — les deux cachent de la complexité, mais la Facade crée une **nouvelle interface simplifiée** devant un sous-système entier, tandis que l'Adapter fait cohabiter **deux interfaces existantes** incompatibles.
+- [Singleton](Singleton.md) — une Facade est souvent implémentée comme un Singleton, puisqu'on n'a généralement besoin que d'un seul point d'entrée vers un sous-système.
+
+**Principes appliqués :**
+- [Separation of Concerns](../principles/Separation%20of%20Concerns.md) — la Facade sépare le code client de la complexité des sous-systèmes. Le client s'occupe de "quoi faire", la Facade s'occupe de "comment le faire".
+- [Loose Coupling](../principles/Loose%20Coupling.md) — le client ne dépend que de la Facade, pas des 5 services qu'elle orchestre en interne.
+- [Encapsulation](../principles/Encapsulation.md) — la Facade encapsule les interactions entre sous-systèmes derrière une API simple.
+
+**Pratiques liées :**
+- [Naming](../practices/Naming.md) — le nom de la Facade et de ses méthodes est crucial : `placeOrder()` est immédiatement compréhensible, `process()` ne l'est pas.
+
+**Différence clé avec l'Adapter :** l'Adapter résout un problème de **compatibilité** ("cette lib a la mauvaise interface"). La Facade résout un problème de **complexité** ("ce sous-système a trop de pièces à assembler").

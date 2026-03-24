@@ -57,3 +57,17 @@ class UserManager {
 Quel rapport entre créer un utilisateur et sauvegarder la base de données ? Aucun. Cette classe a zéro cohésion. Modifier le format de la monnaie risque de casser la génération de PDF. Et impossible de réutiliser `formatCurrency()` sans embarquer le backup de base de données.
 
 Avec une haute cohésion, chaque classe regroupe des fonctionnalités liées : `UserService`, `EmailService`, `ReportGenerator`, `BackupService`. Chacune est compréhensible, testable et réutilisable.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Single Responsibility](Single%20Responsibility.md) — très proches mais pas identiques. Le SRP dit "une seule raison de changer", la haute cohésion dit "les éléments d'un module doivent être liés entre eux". En pratique, respecter l'un mène naturellement à respecter l'autre. La différence : le SRP se concentre sur les **raisons de changer**, la cohésion sur le **degré de relation** entre les éléments.
+- [Loose Coupling](Loose%20Coupling.md) — les deux vont de pair. Des modules hautement cohésifs sont naturellement faiblement couplés : quand chaque module a une responsabilité claire, il a moins de raisons de dépendre des autres.
+- [Separation of Concerns](Separation%20of%20Concerns.md) — la séparation des préoccupations pousse vers la haute cohésion. Séparer les préoccupations = regrouper les choses liées ensemble et séparer les choses non liées.
+- [Encapsulation](Encapsulation.md) — un module cohésif encapsule naturellement ses données et ses comportements. La cohésion et l'encapsulation se renforcent mutuellement.
+
+**Patterns qui favorisent la haute cohésion :**
+- [Facade](../patterns/Facade.md) — en regroupant les interactions avec un sous-système dans une seule classe, la Facade maintient une haute cohésion.
+- [Strategy](../patterns/Strategy.md) — chaque stratégie est hautement cohésive : elle ne contient que la logique d'un seul algorithme.
+
+**Point de vigilance :** haute cohésion ne veut pas dire "une méthode par classe". Un `OrderService` peut avoir `createOrder()`, `cancelOrder()`, `getOrderById()` — c'est cohésif car tout tourne autour des commandes. Le problème arrive quand il a aussi `sendEmail()` et `generatePDF()`.

@@ -226,3 +226,17 @@ class EmailAndSMSAndLogNotifier extends MessageNotifier { ... }
 Chaque nouvelle fonctionnalité double le nombre de classes. C'est l'explosion combinatoire : avec 5 comportements optionnels, on se retrouve avec 31 sous-classes à écrire et maintenir. Et si la logique d'envoi d'email change, il faut la modifier dans `EmailNotifier`, `EmailAndSMSNotifier`, `EmailAndLogNotifier`, `EmailAndSMSAndLogNotifier`…
 
 Avec le Decorator, chaque comportement est une classe indépendante qu'on empile. 5 comportements = 5 classes, combinables à l'infini.
+
+## Liens avec les autres concepts
+
+**Patterns proches :**
+- [Adapter](Adapter.md) — les deux wrappent un objet, mais le Decorator **garde la même interface** et ajoute du comportement, tandis que l'Adapter **change l'interface** pour la rendre compatible. Le Decorator empile, l'Adapter traduit.
+- [Strategy](Strategy.md) — les deux permettent de varier le comportement, mais le Decorator **empile des couches** (email + SMS + log), tandis que le Strategy **substitue un algorithme entier** (voiture OU vélo). Le Decorator est additif, le Strategy est alternatif.
+- [Facade](Facade.md) — la Facade simplifie un sous-système complexe. Le Builder du Decorator (Fluent API) joue un rôle similaire : il cache la complexité de l'empilement des décorateurs.
+
+**Principes appliqués :**
+- [Single Responsibility](../principles/Single%20Responsibility.md) — chaque décorateur n'a qu'**une seule** responsabilité (email, log, retry...). C'est ce qui rend la composition possible.
+- [Open/Closed](../principles/Open%20&%20Closed.md) — on ajoute des comportements en créant de nouveaux décorateurs, sans modifier les classes existantes.
+- [Loose Coupling](../principles/Loose%20Coupling.md) — chaque décorateur ne connaît que l'interface `Notifier`, pas les autres décorateurs de la pile.
+
+**Différence clé avec le Strategy :** le Strategy dit "utilise cet algorithme **à la place** de celui-là". Le Decorator dit "ajoute ce comportement **en plus** de celui qui existe déjà". On peut combiner les deux : un Strategy pour choisir l'algorithme de base, et des Decorators pour y greffer du logging, du retry, etc.

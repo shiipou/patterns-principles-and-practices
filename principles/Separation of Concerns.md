@@ -54,3 +54,20 @@ public String handleRequest(HttpRequest request) {
 SQL, HTML et logique métier dans la même méthode. Changer l'affichage risque de casser le calcul. Migrer de MySQL à PostgreSQL oblige à toucher du code qui gère aussi le HTML. Et impossible de tester le calcul de TVA sans une connexion à la base.
 
 Avec la séparation des préoccupations, chaque couche (présentation, métier, données) vit dans ses propres classes. On peut modifier l'une sans impacter les autres.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Single Responsibility](Single%20Responsibility.md) — très proches mais à des échelles différentes. Le SRP s'applique au niveau de la **classe** ("une seule raison de changer"), la Separation of Concerns s'applique au niveau du **système** (séparer présentation, métier, données). Le SRP est la version micro de la Separation of Concerns.
+- [High Cohesion](High%20Cohesion.md) — séparer les préoccupations crée des modules hautement cohésifs. Chaque couche regroupe des fonctionnalités liées.
+- [Loose Coupling](Loose%20Coupling.md) — des préoccupations bien séparées sont faiblement couplées. La couche métier ne connaît pas les détails de la couche de données.
+- [Encapsulation](Encapsulation.md) — chaque couche encapsule ses détails internes et n'expose qu'une interface à la couche au-dessus.
+
+**Patterns qui appliquent ce principe :**
+- [Facade](../patterns/Facade.md) — la Facade sépare le code client de la complexité d'un sous-système. Le client s'occupe du "quoi", la Facade du "comment".
+- [Observer](../patterns/Observer.md) — sépare la détection d'un changement (le sujet) de la réaction à ce changement (les observateurs).
+- [Template Method](../patterns/Template%20Method.md) — sépare la structure de l'algorithme (dans la classe parente) des détails d'implémentation (dans les sous-classes).
+- [Decorator](../patterns/Decorator.md) — sépare les comportements additionnels (log, retry) du comportement de base.
+
+**Pratiques liées :**
+- [Solution Sketching](../practices/Solution%20Sketching.md) — dessiner l'architecture avant de coder aide à identifier les bonnes frontières entre préoccupations.

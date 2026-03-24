@@ -77,3 +77,20 @@ class PaymentProcessor {
 Chaque nouveau moyen de paiement modifie cette méthode. On touche du code qui marchait déjà, avec un risque de régression à chaque ajout. Et cette méthode grossit indéfiniment.
 
 Avec le Open/Closed, on ajoute une nouvelle classe `ApplePayPayment implements PaymentMethod` sans toucher à `PaymentProcessor`. Le code existant reste intact.
+
+## Liens avec les autres concepts
+
+**Principes proches :**
+- [Dependency Inversion](Dependency%20Inversion.md) — les deux se renforcent mutuellement. La DI dit "dépends d'abstractions", le Open/Closed dit "utilise ces abstractions pour étendre sans modifier". Sans inversion de dépendance, le Open/Closed est quasi impossible à appliquer.
+- [Abstraction](Abstraction.md) — les abstractions (interfaces) sont le **mécanisme** qui rend le Open/Closed possible. L'interface `PaymentMethod` est le point d'extension.
+- [Single Responsibility](Single%20Responsibility.md) — chaque implémentation (chaque nouveau moyen de paiement) a sa propre classe avec une seule responsabilité.
+- [Loose Coupling](Loose%20Coupling.md) — un module ouvert à l'extension mais fermé à la modification est naturellement faiblement couplé aux implémentations concrètes.
+
+**Tensions avec d'autres principes :**
+- [KISS](Keep%20It%20Simple,%20Stupid%20(KISS).md) / [YAGNI](You%20Aren't%20Gonna%20Need%20It%20(YAGNI).md) — rendre tout extensible "au cas où" ajoute de la complexité. Le Open/Closed doit être appliqué aux **vrais** points de variation, pas partout.
+
+**Patterns qui appliquent ce principe :**
+- [Strategy](../patterns/Strategy.md) — on ajoute une nouvelle stratégie sans modifier le contexte.
+- [Decorator](../patterns/Decorator.md) — on ajoute des comportements sans modifier les classes existantes.
+- [Observer](../patterns/Observer.md) — on ajoute des observateurs sans modifier le sujet.
+- [Factory Method](../patterns/Factory%20Method.md) / [Abstract Factory](../patterns/Abstract%20Factory.md) — on ajoute de nouveaux types/familles sans modifier le code client.

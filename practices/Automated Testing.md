@@ -60,3 +60,24 @@ Ce code a l'air correct. Mais personne n'a testé : que se passe-t-il si `total`
 Sans test automatisé, ces questions restent sans réponse jusqu'à ce qu'un client se plaigne. Et quand quelqu'un modifie cette méthode dans 6 mois, rien ne vérifie que les cas existants fonctionnent toujours.
 
 Avec un test unitaire, chaque cas est vérifié automatiquement à chaque commit. Une régression est détectée en secondes, pas en production.
+
+## Liens avec les autres concepts
+
+**Principes qui rendent les tests possibles :**
+- [Dependency Inversion](../principles/Dependency%20Inversion.md) — c'est **le** principe clé pour la testabilité. Sans injection de dépendances, impossible de remplacer une vraie base de données par un mock. Si ton code fait `new MySQLDatabase()` en dur, il est intestable en isolation.
+- [Loose Coupling](../principles/Loose%20Coupling.md) — des modules faiblement couplés sont testables indépendamment. Si tester le module A oblige à instancier B, C et D, c'est que le couplage est trop fort.
+- [Single Responsibility](../principles/Single%20Responsibility.md) — une classe avec une seule responsabilité est facile à tester. Une "god class" nécessite des dizaines de tests pour couvrir toutes ses casquettes.
+- [Separation of Concerns](../principles/Separation%20of%20Concerns.md) — séparer les couches (métier, données, présentation) permet de tester chaque couche en isolation.
+
+**Patterns qui facilitent les tests :**
+- [Strategy](../patterns/Strategy.md) — chaque stratégie est testable en isolation, sans instancier le contexte.
+- [Observer](../patterns/Observer.md) — chaque observateur peut être testé indépendamment.
+- [Factory Method](../patterns/Factory%20Method.md) / [Abstract Factory](../patterns/Abstract%20Factory.md) — les factories permettent d'injecter des objets de test.
+
+**Pattern problématique :**
+- [Singleton](../patterns/Singleton.md) — les Singletons rendent les tests difficiles : état global qui persiste entre les tests, impossible à mocker.
+
+**Pratiques liées :**
+- [Pair Programming](Pair%20Programming.md) — le format Ping-Pong (un écrit le test, l'autre le code) est du TDD à deux.
+- [Code Reviewing](Code%20Reviewing.md) — vérifier la présence et la qualité des tests fait partie de la review.
+- [Performance Optimizing](Performance%20Optimizing.md) — les tests de charge sont une forme de test automatisé pour la performance.
