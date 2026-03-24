@@ -3,6 +3,10 @@ name: Build & Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+    paths:
+      - "*.md"
+      - "quartz.config.ts"
+      - "quartz.layout.ts"
   workflow_dispatch:
 
 permissions:
@@ -38,7 +42,11 @@ jobs:
       - name: Copy vault content
         run: |
           rm -rf quartz-build/content/*
-          cp -r patterns practices principles README.md LICENSE.md quartz-build/content/
+          cp README.md quartz-build/content/
+          find . -maxdepth 1 -type d ! -name '.*' ! -name 'quartz-build' ! -name 'node_modules' -print0 | while IFS= read -r -d '' dir; do
+            echo "Processing $dir..."
+            cp -r "$dir" "quartz-build/content/"
+          done
           mv quartz-build/content/README.md quartz-build/content/index.md
 
       - name: Apply Quartz configuration
