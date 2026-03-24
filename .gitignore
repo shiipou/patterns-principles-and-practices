@@ -1,0 +1,7 @@
+/.obsidian/
+!/.obsidian/config/
+!/.obsidian/plugins/
+!/.obsidian/snippets/
+!/.obsidian/core-plugins.json
+!/.obsidian/community-plugins.json
+!/.obsidian/graph.json
