@@ -39,7 +39,7 @@ Ce repository contient les éléments suivants :
 - [Separation of Concerns](principles/Separation%20of%20Concerns.md)
 - [Open & Closed](principles/Open%20&%20Closed.md)
 - [Abstraction](principles/Abstraction.md)
-- [Convention over Configuration](principles/Convention%20over%20Configuration.md)
+- [Convention over configuration](principles/Convention%20over%20configuration.md)
 - [Encapsulation](principles/Encapsulation.md)
 - [Loose Coupling](principles/Loose%20Coupling.md)
 - [High Cohesion](principles/High%20Cohesion.md)
@@ -49,9 +49,9 @@ Ce repository contient les éléments suivants :
 
 ### Practices
 
-- [Code Reviewing](practices/Automated%20Testing.md)
+- [Code Reviewing](practices/Code%20Reviewing.md)
 - [Commenting](practices/Commenting.md)
-- [Solution Sketching](practices/Solution%20ketching.md)
+- [Solution Sketching](practices/Solution%20Sketching.md)
 - [Automated Testing](practices/Automated%20Testing.md)
 - [Spiking](practices/Spiking.md)
 - [Retrospective](practices/Retrospective.md)
