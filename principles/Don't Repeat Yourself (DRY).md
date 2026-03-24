@@ -1,44 +1,75 @@
 # Principe : Don't Repeat Yourself (DRY)
 
-"Don't Repeat Yourself" (DRY) est un principe de conception logicielle qui encourage à éviter la duplication de code dans un système informatique. Le principe fondamental derrière DRY est de réduire la redondance en organisant le code de manière à ce que chaque morceau d'information ou de logique ne soit représenté qu'une seule fois.
+Si un bout de logique ou une information apparaît à plusieurs endroits dans le code, il y a un problème. Le jour où ça change, il faut penser à tout mettre à jour — et on en oublie toujours un. DRY, c'est simplement : chaque information ne doit avoir qu'une seule source de vérité.
 
-## Concept Fondamental :
+## Concept fondamental
 
-Le principe DRY stipule qu'une pièce spécifique d'information ou de logique dans un système logiciel devrait avoir une seule source d'autorité, ce qui signifie qu'elle ne devrait être écrite qu'une seule fois. Au lieu de copier-coller du code ou de dupliquer des informations, DRY encourage à factoriser le code répété en le plaçant dans des fonctions, des modules ou des composants réutilisables.
+Le principe DRY dit qu'une pièce d'information ou de logique ne doit être représentée qu'une seule fois dans le système. Au lieu de copier-coller du code, on le factorise dans des fonctions, des modules ou des composants réutilisables.
 
-## Principes Clés :
+Ça ne concerne pas que les constantes. DRY s'applique à :
+- La logique dupliquée → extraire une fonction
+- Les structures répétées → créer une classe ou un composant réutilisable
+- La documentation → ne pas maintenir la même info à deux endroits
 
-1. **Élimination de la Redondance :** Évitez la duplication de code en factorisant les parties communes dans des fonctions ou des modules réutilisables.
+## Exemple
 
-2. **Clarté et Maintenabilité :** Le principe DRY favorise la clarté du code en assurant qu'un seul endroit définit chaque partie du système.
+Le taux de TVA est utilisé à plusieurs endroits. Au lieu de mettre `0.20` en dur partout :
 
-3. **Facilité de Maintenance :** En suivant DRY, les modifications ne doivent être apportées qu'à un seul endroit, ce qui simplifie la maintenance et réduit les risques d'erreurs.
+```java
+public class PricingService {
+    private static final double VAT_RATE = 0.20;
 
-## Exemple :
-
-Imaginons un scénario où une application web utilise la valeur de la TVA (Taxes sur la Valeur Ajoutée) dans plusieurs endroits du code. Au lieu de répéter cette valeur à plusieurs endroits, on pourrait utiliser une constante ou une fonction pour représenter cette valeur unique :
-
-```javascript
-const VAT_RATE = 0.20; // Taux de TVA (20%)
-
-function calculateTotalPrice(price) {
-    return price * (1 + VAT_RATE); // Calcul du prix total avec TVA
+    public double calculateTotalPrice(double price) {
+        return price * (1 + VAT_RATE);
+    }
 }
 
-// Utilisation de la fonction calculateTotalPrice
-let productPrice = 100;
-let totalPrice = calculateTotalPrice(productPrice);
-console.log("Prix total avec TVA :", totalPrice);
+// Utilisation
+PricingService pricing = new PricingService();
+double totalPrice = pricing.calculateTotalPrice(100);
+System.out.println("Prix TTC : " + totalPrice); // 120.0
 ```
 
-Dans cet exemple, le taux de TVA est défini comme une constante `VAT_RATE`, ce qui évite de répéter la valeur `0.20` à chaque calcul de prix total. La fonction `calculateTotalPrice` encapsule la logique de calcul du prix total avec la TVA, de sorte que cette logique n'est écrite qu'une seule fois et peut être réutilisée à plusieurs endroits dans le code.
+Si la TVA passe à 21%, on change une seule ligne. Sans ça, il faudrait chercher tous les `0.20` dans le code et prier pour n'en avoir oublié aucun.
 
-## Avantages de DRY :
+## Avantages et inconvénients
 
-- **Réduction de la Redondance :** Le code DRY réduit la duplication et favorise la réutilisation.
-- **Clarté et Lisibilité :** Le code DRY est plus clair et plus facile à comprendre car il évite la redondance.
-- **Maintenabilité Accrue :** Les modifications ne nécessitent des mises à jour que dans un seul endroit, ce qui simplifie la maintenance et réduit les risques d'erreurs.
+**Avantages :**
+- Réduit la duplication et favorise la réutilisation du code
+- Les modifications ne sont à faire qu'à un seul endroit, ce qui simplifie la maintenance
+- Le code est plus clair et plus lisible
 
-## Conclusion :
+**Inconvénients :**
+- Parfois on force une abstraction entre deux bouts de code qui se ressemblent *par hasard* mais n'ont pas la même raison de changer
+- Extraire trop agressivement peut créer des dépendances artificielles entre des modules qui devraient être indépendants
+- Il faut trouver le bon équilibre : toute duplication n'est pas forcément mauvaise
 
-En suivant le principe DRY, les développeurs peuvent améliorer la qualité, la clarté et la maintenabilité du code en évitant la duplication inutile. Cela permet également de faciliter l'évolution du système en introduisant des modifications de manière ciblée et cohérente.
+## Sans ce principe
+
+Sans DRY, la même logique est dupliquée dans plusieurs endroits :
+
+```java
+class OrderService {
+    public double calculateTotal(List<Item> items) {
+        double total = 0;
+        for (Item item : items) { total += item.getPrice() * item.getQuantity(); }
+        total *= 1.20; // TVA
+        if (total > 100) total *= 0.95; // réduction 5%
+        return total;
+    }
+}
+
+class InvoiceService {
+    public double getInvoiceAmount(List<Item> items) {
+        double total = 0;
+        for (Item item : items) { total += item.getPrice() * item.getQuantity(); }
+        total *= 1.20; // TVA
+        if (total > 100) total *= 0.95; // réduction 5%
+        return total;
+    }
+}
+```
+
+Le jour où la TVA passe à 21%, il faut retrouver **tous** les endroits où `1.20` apparaît. Et on en oublie toujours un. Le bug ne sera découvert que quand un client recevra une facture incohérente.
+
+Avec DRY, un seul `PricingService.calculateTotal()` est appelé partout. Un changement = un seul endroit à modifier.

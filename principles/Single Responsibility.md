@@ -1,22 +1,16 @@
 # Principe : Single Responsibility
 
-Le principe de "Single Responsibility" (SRP), ou Principe de Responsabilité Unique, est un concept de conception logicielle qui encourage à ce qu'une classe ou un module ait une seule raison de changer. En d'autres termes, chaque élément de votre code (classe, fonction, module) doit avoir une seule responsabilité ou tâche à accomplir.
+Une classe ne devrait avoir qu'une seule raison de changer. Si elle en a plusieurs, c'est qu'elle porte trop de casquettes.
 
-## Concept Fondamental :
+## Concept fondamental
 
-Le principe de Responsabilité Unique stipule qu'un composant logiciel (comme une classe ou un module) doit avoir une seule raison de changer. Cela signifie qu'il ne devrait y avoir qu'une seule justification pour modifier ce composant. L'idée est de favoriser la modularité, la clarté et la maintenabilité du code en évitant les classes surchargées avec des responsabilités multiples.
+Le SRP dit qu'un composant logiciel (classe, fonction, module) ne doit avoir qu'une seule responsabilité. Une seule raison de changer. L'idée est de favoriser la modularité et la clarté en évitant les classes surchargées qui font trop de choses.
 
-## Principes Clés :
+Le SRP ne veut pas dire "une méthode par classe". Une classe peut avoir plusieurs méthodes, tant qu'elles tournent toutes autour de la même responsabilité. Le SRP favorise aussi la haute cohésion : en regroupant des fonctionnalités étroitement liées dans un même composant.
 
-1. **Séparation des Responsabilités :** Chaque classe ou module doit se concentrer sur une seule tâche ou responsabilité.
+## Exemple
 
-2. **Cohésion Élevée :** Le SRP favorise la cohésion élevée en regroupant des fonctionnalités étroitement liées dans un même composant.
-
-3. **Facilité de Maintenance :** En respectant le SRP, les modifications et les corrections de bugs deviennent plus ciblées et moins susceptibles d'entraîner des effets indésirables.
-
-## Exemple :
-
-Prenons l'exemple d'une application de gestion d'employés. Nous pourrions avoir une classe `Employee` qui représente un employé et qui contient des méthodes pour gérer les informations de l'employé (telles que le nom, le salaire, les informations de contact, etc.).
+Voici une classe `Employee` qui fait trop de choses :
 
 ```java
 public class Employee {
@@ -24,43 +18,62 @@ public class Employee {
     private double salary;
     private String email;
 
-    public Employee(String name, double salary, String email) {
-        this.name = name;
-        this.salary = salary;
-        this.email = email;
-    }
+    public void updateSalary(double newSalary) { this.salary = newSalary; }
+    public void sendEmail(String message) { /* envoi d'email */ }
+    public double calculateTax() { return this.salary * 0.2; }
+}
+```
 
-    public void updateSalary(double newSalary) {
-        this.salary = newSalary;
-        // Logique pour notifier l'employé ou effectuer d'autres actions liées à la mise à jour du salaire
-    }
+Cette classe a trois raisons de changer :
+- Les règles de gestion des salaires évoluent
+- La façon d'envoyer des emails change
+- Le calcul d'impôts est modifié
 
-    public void sendEmail(String message) {
-        // Logique pour envoyer un email à l'employé
-    }
+Pour respecter le SRP, on sépare :
+- `Employee` — les données de l'employé
+- `TaxCalculator` — le calcul des impôts
+- `EmailService` — l'envoi d'emails
 
-    // Méthodes pour gérer d'autres aspects de l'employé (non recommandées)
+Chaque classe a une seule responsabilité. Si les règles fiscales changent, seul `TaxCalculator` est impacté. Le reste ne bouge pas.
 
-    // Méthode pour calculer les impôts sur le salaire de l'employé (responsabilité multiple)
-    public double calculateTax() {
-        // Logique pour calculer les impôts
-        return this.salary * 0.2; // Exemple simplifié
+## Avantages et inconvénients
+
+**Avantages :**
+- Les classes modulaires sont plus faciles à comprendre, tester et maintenir
+- Les classes avec une seule responsabilité sont plus réutilisables
+- Moins de couplage entre les différentes préoccupations
+- Les modifications sont plus ciblées et moins susceptibles de provoquer des effets de bord
+
+**Inconvénients :**
+- Peut mener à une explosion du nombre de classes si on pousse trop loin
+- La frontière entre "une responsabilité" et "deux responsabilités" est parfois floue
+- Plus de fichiers et plus de navigation dans le code
+
+## Sans ce principe
+
+Sans responsabilité unique, une seule classe fait tout :
+
+```java
+class UserService {
+    public void register(String name, String email) {
+        // Validation
+        if (!email.contains("@")) throw new RuntimeException("Email invalide");
+
+        // Persistance
+        Connection conn = DriverManager.getConnection("jdbc:mysql://...");
+        conn.prepareStatement("INSERT INTO users ...").executeUpdate();
+
+        // Envoi d'email
+        SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+        smtp.send(email, "Bienvenue !");
+
+        // Log
+        FileWriter fw = new FileWriter("app.log");
+        fw.write("User registered: " + name);
     }
 }
 ```
 
-Dans cet exemple, la classe `Employee` a plusieurs responsabilités : gérer les informations de l'employé, mettre à jour le salaire, envoyer des e-mails, et même calculer les impôts sur le salaire. Cela viole le principe de Responsabilité Unique car la classe a plus d'une raison de changer : si les règles fiscales changent, si la logique d'envoi d'e-mails doit être mise à jour, etc.
+Changer de base de données ? Modifier `UserService`. Changer de service mail ? Modifier `UserService`. Changer le format de log ? Modifier `UserService`. Quatre raisons de changer = quatre chances de casser quelque chose à chaque modification.
 
-Pour respecter le SRP, nous pourrions séparer les responsabilités en créant des classes distinctes :
-
-- `Employee` : Responsable de la gestion des informations de base de l'employé.
-- `SalaryCalculator` : Responsable du calcul des impôts sur le salaire.
-- `EmailService` : Responsable de l'envoi d'e-mails.
-
-## Avantages du SRP :
-
-- **Meilleure Modularité :** Les classes modulaires sont plus faciles à comprendre, à tester et à maintenir.
-- **Réutilisabilité :** Les classes avec une seule responsabilité sont plus réutilisables dans d'autres parties de l'application.
-- **Moins de Couplage :** Les classes fortement couplées sont évitées, ce qui rend le système plus flexible et évolutif.
-
-En conclusion, le principe de Responsabilité Unique est essentiel pour concevoir des systèmes logiciels modulaires et maintenables en réduisant la complexité et en favorisant une bonne séparation des responsabilités. Cela contribue à des applications plus robustes et évolutives sur le long terme.
+Avec le SRP, chaque responsabilité est dans sa propre classe. Une modification n'impacte que la classe concernée.

@@ -1,51 +1,59 @@
 # Principe : High Cohesion
 
-"High Cohesion" (cohésion élevée) est un principe de conception logicielle qui encourage à regrouper les fonctionnalités et les responsabilités liées étroitement au sein d'un même composant ou module. Ce concept vise à maximiser l'efficacité, la maintenabilité et la réutilisabilité du code en favorisant des composants bien définis et spécialisés dans une tâche spécifique.
+La cohésion, c'est le degré auquel les éléments d'un module travaillent ensemble vers un même objectif. Un module avec une haute cohésion fait une chose et la fait bien. Un module avec une faible cohésion fait un peu de tout — et c'est le bazar.
 
-## Concept Fondamental :
+## Concept fondamental
 
-La cohésion élevée se réfère au degré auquel les éléments d'un module ou composant sont liés entre eux et travaillent ensemble pour atteindre un objectif commun. Un module avec une cohésion élevée contient des fonctionnalités qui sont étroitement liées et interagissent fréquemment entre elles, tandis que les fonctionnalités non liées sont séparées en d'autres modules.
+Un module hautement cohérent contient des fonctionnalités qui sont étroitement liées et qui interagissent fréquemment entre elles. Les fonctionnalités non liées sont séparées dans d'autres modules. La cohésion élevée va souvent de pair avec un faible couplage : des modules bien découpés sont naturellement plus indépendants les uns des autres.
 
-## Principes Clés :
+Il existe différents niveaux de cohésion, du plus faible au plus fort :
+- **Cohésion fonctionnelle** — les éléments sont regroupés par tâche commune (le meilleur)
+- **Cohésion séquentielle** — les éléments s'exécutent dans un ordre précis
+- **Cohésion communicationnelle** — les éléments agissent sur les mêmes données
+- **Cohésion temporelle** — les éléments sont regroupés car ils s'exécutent au même moment
+- **Cohésion logique** — les éléments sont regroupés par relations logiques (le plus faible)
 
-1. **Responsabilités Claires :** Chaque module ou composant doit avoir une seule et unique responsabilité bien définie.
+## Exemple
 
-2. **Faible Couplage :** La cohésion élevée est souvent associée à un faible couplage, ce qui signifie que les interactions entre les modules sont minimisées et bien définies.
+Un module de traitement de commandes devrait contenir :
+- La validation des données de commande
+- Le calcul du montant total
+- La génération de la facture
+- L'envoi de la confirmation
 
-3. **Modularité :** Les modules hautement cohérents sont plus modulaires, ce qui facilite la réutilisation et la maintenance du code.
+Tout ça est lié au même sujet : la commande. C'est cohérent.
 
-### Niveaux de Cohésion :
+Par contre, si ce même module gère aussi l'authentification des utilisateurs et l'envoi de newsletters, la cohésion est faible — ces responsabilités n'ont rien à voir entre elles.
 
-Il existe plusieurs niveaux de cohésion, du plus faible au plus élevé :
+En pratique, quand une classe a trop de méthodes qui ne se rapportent pas au même sujet, c'est un signe qu'il faut la découper.
 
-- **Cohésion Fonctionnelle (Functional Cohesion) :** Les éléments d'un module sont regroupés en fonction de leur tâche ou fonctionnalité commune.
+## Avantages et inconvénients
 
-- **Cohésion Séquentielle (Sequential Cohesion) :** Les éléments d'un module sont exécutés dans un ordre spécifique, mais ne sont pas nécessairement liés par une fonctionnalité commune.
+**Avantages :**
+- Facilite la compréhension du code et la localisation des fonctionnalités
+- Réduit la complexité en limitant les interactions entre les composants
+- Favorise la réutilisabilité et la modularité du code
+- Les modifications ciblées sont plus faciles et moins risquées
 
-- **Cohésion Communicationnelle (Communicational Cohesion) :** Les éléments d'un module agissent sur les mêmes données ou partagent des informations.
+**Inconvénients :**
+- Peut mener à un trop grand nombre de petits modules si on pousse trop loin
+- Parfois la frontière entre "lié" et "pas lié" n'est pas évidente
+- Nécessite de repenser la structure quand les responsabilités évoluent
 
-- **Cohésion Temporelle (Temporal Cohesion) :** Les éléments d'un module sont regroupés car ils doivent être exécutés au même moment.
+## Sans ce principe
 
-- **Cohésion Procédurale (Procedural Cohesion) :** Les éléments d'un module sont liés par une séquence de pas d'une tâche.
+Sans haute cohésion, on se retrouve avec des "god classes" qui font tout :
 
-- **Cohésion Logique (Logical Cohesion) :** Les éléments d'un module sont regroupés par des relations logiques et algorithmiques.
+```java
+class UserManager {
+    public void createUser(String name) { /* ... */ }
+    public void sendEmail(String to, String body) { /* ... */ }
+    public byte[] generatePdfReport() { /* ... */ }
+    public void backupDatabase() { /* ... */ }
+    public String formatCurrency(double amount) { /* ... */ }
+}
+```
 
-## Exemple :
+Quel rapport entre créer un utilisateur et sauvegarder la base de données ? Aucun. Cette classe a zéro cohésion. Modifier le format de la monnaie risque de casser la génération de PDF. Et impossible de réutiliser `formatCurrency()` sans embarquer le backup de base de données.
 
-Imaginons un module de traitement des commandes dans un système de commerce électronique. Un module hautement cohérent pour le traitement des commandes pourrait inclure les fonctionnalités suivantes :
-
-- Validation des données de la commande.
-- Calcul du montant total de la commande.
-- Génération des factures et des reçus.
-- Envoi de notifications de confirmation au client.
-
-En regroupant ces fonctionnalités liées au traitement des commandes dans un module distinct, on obtient une cohésion élevée qui favorise la réutilisabilité et la maintenabilité du code. Chaque modification ou ajout de fonctionnalité dans ce module est isolé et n'affecte pas les autres parties du système.
-
-## Avantages de la Cohésion Élevée :
-
-- Facilite la compréhension du code et la localisation des fonctionnalités.
-- Réduit la complexité en limitant les interactions entre les composants.
-- Favorise la réutilisabilité et la modularité du code.
-- Améliore la maintenabilité en facilitant les modifications ciblées.
-
-En conclusion, la cohésion élevée est un principe important de conception logicielle qui contribue à créer des modules et des composants spécialisés, bien définis et interconnectés. Cela conduit à des systèmes plus robustes, flexibles et faciles à maintenir sur le long terme.
+Avec une haute cohésion, chaque classe regroupe des fonctionnalités liées : `UserService`, `EmailService`, `ReportGenerator`, `BackupService`. Chacune est compréhensible, testable et réutilisable.

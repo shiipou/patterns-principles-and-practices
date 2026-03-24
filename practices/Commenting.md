@@ -1,74 +1,81 @@
 # Practices : Commenting
 
-Le commentaire dans le code informatique est une pratique consistant à inclure des annotations textuelles qui expliquent le fonctionnement, l'intention ou le contexte du code. Les commentaires servent à améliorer la lisibilité, la compréhension et la maintenabilité du code pour les développeurs et les collaborateurs.
+Un bon commentaire explique **pourquoi**, pas **quoi**. Le code dit déjà ce qu'il fait — un commentaire doit expliquer l'intention, le contexte ou les pièges que le code seul ne peut pas transmettre.
 
-## Objectifs des Commentaires :
+## Concept fondamental
 
-1. **Explication du Code :** Les commentaires expliquent ce que fait le code, pourquoi il le fait et comment il fonctionne.
+Les commentaires servent à combler l'écart entre ce que le code *fait* et ce que le développeur *voulait* faire. Si le code est suffisamment expressif (bon nommage, structure claire), la plupart des commentaires deviennent inutiles. La règle d'or : si tu sens le besoin de commenter un morceau de code, demande-toi d'abord si tu ne pourrais pas le rendre plus clair en le renommant ou en le restructurant.
 
-2. **Documentation :** Les commentaires servent de documentation pour les futurs développeurs et pour ceux qui maintiennent le code.
+## Exemple
 
-3. **Clarification des Intentions :** Les commentaires précisent l'intention derrière une implémentation ou une décision de conception.
+**Commentaires inline** — à côté d'une ligne pour clarifier un point précis :
+```java
+// On trie par date décroissante pour afficher les plus récents en premier
+results.sort(Comparator.comparing(Result::getDate).reversed());
+```
 
-4. **Signalement des Risques :** Les commentaires peuvent signaler des zones sensibles, des limitations ou des considérations spéciales.
+**Commentaires de documentation** — pour les fonctions et classes publiques :
+```java
+/**
+ * Calcule la somme d'une liste de nombres.
+ *
+ * @param numbers la liste de nombres à additionner
+ * @return la somme de tous les éléments
+ */
+public double calculateTotal(List<Double> numbers) {
+    return numbers.stream().mapToDouble(Double::doubleValue).sum();
+}
+```
 
-## Types de Commentaires :
+**Commentaires de bloc** — pour expliquer un algorithme ou une section complexe.
 
-1. **Commentaires Inline :** Placés à côté du code pour expliquer des lignes spécifiques.
+Un commentaire ne doit **jamais servir de pansement** pour du mauvais code. Si tu te retrouves à écrire un paragraphe pour expliquer ce que fait un bloc, c'est que le code est trop compliqué — il faut le refactorer, pas le commenter :
 
-   ```python
-   # Calculer la somme des éléments dans la liste
-   total = sum(numbers)
-   ```
+```java
+// ❌ Le commentaire compense du code illisible
+// Vérifie si l'utilisateur est majeur, actif et non banni
+if (u.getA() >= 18 && u.getS() == 1 && !u.getB()) { ... }
 
-2. **Commentaires de Documentation :** Structurés pour générer de la documentation automatique à partir du code.
+// ✅ Le code est clair, le commentaire est inutile
+if (user.isAdult() && user.isActive() && !user.isBanned()) { ... }
+```
 
-   ```python
-   def calculate_total(numbers):
-       """Calculates the sum of numbers in a list.
+Les erreurs courantes :
+- Commenter l'évident : `i += 1  // incrémente i` → inutile
+- Laisser des commentaires obsolètes qui ne correspondent plus au code
+- Commenter du code mort au lieu de le supprimer (le VCS est là pour ça)
+- **Utiliser les commentaires pour justifier du code confus** — rends le code lisible à la place
 
-       Args:
-           numbers (list): List of numbers to sum.
+## Avantages et inconvénients
 
-       Returns:
-           float: Sum of the numbers.
-       """
-       return sum(numbers)
-   ```
+**Avantages :**
+- Explique le "pourquoi" derrière des choix techniques non évidents
+- Facilite la compréhension pour les nouveaux développeurs
+- La documentation de fonctions publiques améliore l'utilisation de l'API
 
-3. **Commentaires de Bloc :** Expliquent des sections entières de code ou des algorithmes.
+**Inconvénients :**
+- Les commentaires peuvent devenir obsolètes et mentir sur ce que fait le code
+- Trop de commentaires encombrent le code et réduisent la lisibilité
+- Commenter un code mal écrit est un pansement — mieux vaut le rendre plus clair
 
-   ```java
-   /*
-    * This method sorts an array using the bubble sort algorithm.
-    * It iteratively compares adjacent elements and swaps them if they are in the wrong order.
-    * The process is repeated until the array is fully sorted.
-    */
-   public void bubbleSort(int[] arr) {
-       // Implementation of bubble sort algorithm
-   }
-   ```
+## Sans cette pratique
 
-## Bonnes Pratiques pour les Commentaires :
+Sans bonnes pratiques de commentaires, le code ment :
 
-- **Clarté et Concision :** Utilisez un langage clair et simple pour expliquer le code de manière concise.
+```java
+// ❌ Commentaire mensonger (le code a changé, pas le commentaire)
+// Retourne le prix HT
+public double getPrice() {
+    return price * 1.20; // En fait c'est le TTC...
+}
 
-- **Actualisation Régulière :** Gardez les commentaires à jour avec le code pour éviter les informations obsolètes.
+// ❌ Commentaire inutile
+i++; // On incrémente i
 
-- **Évitez les Commentaires Évidents :** Ne commentez pas le code évident qui est auto-explicatif.
+// ✅ Commentaire utile : explique le POURQUOI
+// On attend 300ms car l'API de paiement renvoie un 429
+// si on enchaîne les requêtes trop vite (cf. ticket JIRA-4521)
+Thread.sleep(300);
+```
 
-- **Fournissez le Pourquoi, Pas le Quoi :** Expliquez les raisons derrière le code plutôt que de simplement répéter ce qu'il fait.
-
-- **Utilisation de Conventions :** Suivez les conventions de commentaires de votre équipe ou de votre communauté pour assurer la cohérence.
-
-## Quand Utiliser les Commentaires :
-
-- **Pour les Parties Complexes :** Commentez les parties complexes ou déroutantes du code pour expliquer le raisonnement derrière l'approche choisie.
-
-- **Pour les Exceptions :** Expliquez les cas spéciaux ou les limitations du code avec des commentaires.
-
-- **Pour le Code Non Trivial :** Les commentaires sont particulièrement utiles pour le code non trivial où l'intention peut ne pas être évidente.
-
-## Conclusion :
-
-Les commentaires sont un outil précieux pour améliorer la lisibilité et la compréhension du code. En ajoutant des commentaires judicieusement, les développeurs peuvent rendre leur code plus accessible, documenté et facile à maintenir pour eux-mêmes et pour d'autres membres de l'équipe.
+Un commentaire obsolète est pire que pas de commentaire — il induit en erreur. Un commentaire qui répète le code est du bruit. Le bon commentaire explique ce que le code ne peut pas dire : l'intention, le contexte, le piège.

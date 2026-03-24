@@ -1,107 +1,129 @@
 # Design Pattern : Abstract Factory
 
-Le design pattern Abstract Factory est un pattern de création qui fournit une interface pour créer des familles d'objets liés sans spécifier leurs classes concrètes. Il permet de créer des instances de plusieurs types d'objets connexes sans dépendre de leurs implémentations spécifiques.
+L'Abstract Factory est un pattern de création qui permet de produire des familles d'objets liés entre eux, sans avoir à préciser leurs classes concrètes. On passe par une "fabrique" qui sait créer les bons objets pour un contexte donné.
 
-**Exemple de Code :**
+## Concept fondamental
 
-Imaginons un scénario où nous devons créer des produits dans différentes catégories (par exemple, meubles de bureau et meubles de maison) avec différents styles (moderne ou classique). Le pattern Abstract Factory nous permet de créer des familles de produits cohérents sans détailler leurs implémentations spécifiques.
+L'idée est d'avoir une interface de fabrique abstraite qui déclare des méthodes de création pour chaque type de produit de la famille. Chaque variante (bureau, maison, jardin...) fournit sa propre implémentation concrète de cette fabrique. Le code client ne manipule jamais les classes concrètes — il passe par les interfaces de la fabrique et des produits.
 
-Voici comment nous pourrions utiliser le design pattern Abstract Factory pour résoudre ce problème :
+La différence avec le Factory Method : ici on crée des *familles entières* de produits liés (chaise + table + canapé...), pas un seul type de produit.
+
+## Exemple
+
+On a besoin de créer des meubles (chaises et tables), mais selon qu'on équipe un bureau ou une maison, les produits sont différents. Plutôt que de gérer ça à coups de `if`, on crée une fabrique par contexte.
 
 ```java
-// Interface pour définir un produit de chaise
 interface Chair {
     void sitOn();
 }
 
-// Implémentation concrète d'une chaise de bureau
+interface Table {
+    void useFor();
+}
+
 class OfficeChair implements Chair {
     public void sitOn() {
         System.out.println("Vous êtes assis sur une chaise de bureau.");
     }
 }
 
-// Implémentation concrète d'une chaise de maison
 class HomeChair implements Chair {
     public void sitOn() {
         System.out.println("Vous êtes assis sur une chaise de maison.");
     }
 }
 
-// Interface pour définir un produit de table
-interface Table {
-    void useFor();
-}
-
-// Implémentation concrète d'une table de bureau
 class OfficeTable implements Table {
     public void useFor() {
         System.out.println("Cette table est utilisée pour le travail de bureau.");
     }
 }
 
-// Implémentation concrète d'une table de maison
 class HomeTable implements Table {
     public void useFor() {
-        System.out.println("Cette table est utilisée à la maison pour diverses activités.");
+        System.out.println("Cette table est utilisée à la maison.");
     }
 }
 
-// Interface abstraite pour définir une fabrique abstraite de meubles
+// La fabrique abstraite : elle sait créer une chaise et une table
 interface FurnitureFactory {
-    Chair createChair(); // Méthode pour créer une chaise
-    Table createTable(); // Méthode pour créer une table
+    Chair createChair();
+    Table createTable();
 }
 
-// Implémentation concrète d'une fabrique de meubles de bureau
+// Fabrique pour le bureau
 class OfficeFurnitureFactory implements FurnitureFactory {
-    public Chair createChair() {
-        return new OfficeChair(); // Création d'une chaise de bureau
-    }
-
-    public Table createTable() {
-        return new OfficeTable(); // Création d'une table de bureau
-    }
+    public Chair createChair() { return new OfficeChair(); }
+    public Table createTable() { return new OfficeTable(); }
 }
 
-// Implémentation concrète d'une fabrique de meubles de maison
+// Fabrique pour la maison
 class HomeFurnitureFactory implements FurnitureFactory {
-    public Chair createChair() {
-        return new HomeChair(); // Création d'une chaise de maison
-    }
-
-    public Table createTable() {
-        return new HomeTable(); // Création d'une table de maison
-    }
+    public Chair createChair() { return new HomeChair(); }
+    public Table createTable() { return new HomeTable(); }
 }
 
-// Exemple d'utilisation du pattern Abstract Factory
 public class Main {
     public static void main(String[] args) {
-        // Utilisation de la fabrique de meubles de bureau
-        FurnitureFactory officeFactory = new OfficeFurnitureFactory();
-        Chair officeChair = officeFactory.createChair();
-        Table officeTable = officeFactory.createTable();
+        FurnitureFactory factory = new OfficeFurnitureFactory();
+        Chair chair = factory.createChair();
+        Table table = factory.createTable();
 
-        // Utilisation de la fabrique de meubles de maison
-        FurnitureFactory homeFactory = new HomeFurnitureFactory();
-        Chair homeChair = homeFactory.createChair();
-        Table homeTable = homeFactory.createTable();
+        chair.sitOn();
+        table.useFor();
 
-        // Interactions avec les produits créés
-        officeChair.sitOn();
-        officeTable.useFor();
+        // On change de contexte : on passe à la maison
+        factory = new HomeFurnitureFactory();
+        chair = factory.createChair();
+        table = factory.createTable();
 
-        System.out.println(); // Saute une ligne
-
-        homeChair.sitOn();
-        homeTable.useFor();
+        chair.sitOn();
+        table.useFor();
     }
 }
 ```
 
-Dans cet exemple, le design pattern Abstract Factory est utilisé pour définir des familles de produits (chaises et tables) liés à des contextes spécifiques (bureau ou maison). Les interfaces `Chair` et `Table` définissent les fonctionnalités des produits, tandis que les classes concrètes `OfficeChair`, `HomeChair`, `OfficeTable` et `HomeTable` implémentent ces fonctionnalités.
+Le `Main` ne connaît jamais les classes concrètes (`OfficeChair`, `HomeTable`, etc.). Il manipule uniquement l'interface `FurnitureFactory` et les interfaces `Chair` / `Table`. Pour ajouter un nouveau contexte (par ex. "meubles de jardin"), il suffit de créer une nouvelle fabrique — le reste du code ne bouge pas.
 
-Les fabriques abstraites (`OfficeFurnitureFactory` et `HomeFurnitureFactory`) fournissent des méthodes pour créer des instances cohérentes de chaises et de tables en fonction du contexte (bureau ou maison).
+## Avantages et inconvénients
 
-Le pattern Abstract Factory permet de créer des familles de produits sans spécifier les classes concrètes des produits, favorisant ainsi la flexibilité et la séparation des préoccupations dans la conception logicielle.
+**Avantages :**
+- Garantit la cohérence entre les produits d'une même famille (pas de chaise bureau avec une table maison)
+- Isole le code client des classes concrètes — changer de famille entière revient à changer une seule ligne
+- Respecte le principe Open/Closed : on ajoute de nouvelles familles sans modifier le code existant
+
+**Inconvénients :**
+- Ajouter un nouveau type de produit à la famille (par ex. un `Sofa`) oblige à modifier toutes les factories existantes
+- Peut devenir verbeux quand il y a beaucoup de familles et de types de produits
+- Introduit de la complexité si le nombre de familles est faible — un simple Factory Method suffirait
+
+## Sans ce pattern
+
+Sans Abstract Factory, on se retrouve avec des conditions partout pour créer les bons objets :
+
+```java
+class FurnitureStore {
+    Chair createChair(String style) {
+        if (style.equals("office")) return new OfficeChair();
+        else if (style.equals("home")) return new HomeChair();
+        throw new IllegalArgumentException("Style inconnu");
+    }
+
+    Desk createDesk(String style) {
+        if (style.equals("office")) return new OfficeDesk();
+        else if (style.equals("home")) return new HomeDesk();
+        throw new IllegalArgumentException("Style inconnu");
+    }
+}
+
+// Utilisation — rien n'empêche de mélanger les familles
+Chair chair = store.createChair("office");
+Desk desk = store.createDesk("home"); // Incohérent, et aucune erreur à la compilation
+```
+
+Problèmes :
+- Chaque nouveau style oblige à modifier **toutes** les méthodes de création
+- Rien ne garantit la cohérence entre les objets — on peut mélanger une `OfficeChair` avec un `HomeDesk` sans que le compilateur bronche
+- La logique de sélection (les `if/else`) est dupliquée dans chaque méthode
+
+Avec l'Abstract Factory, on choisit une factory (`OfficeFactory` ou `HomeFactory`) et tous les objets créés sont automatiquement de la même famille. Impossible de mélanger.

@@ -1,89 +1,107 @@
 # Design Pattern : Observer
 
-Le design pattern Observer est un pattern comportemental qui permet à un objet (appelé sujet) de maintenir une liste de dépendances (observateurs) afin de les notifier automatiquement en cas de changement d'état ou de données.
+L'Observer permet à un objet (le "sujet") de prévenir automatiquement une liste d'objets intéressés (les "observateurs") quand son état change. Le sujet n'a pas besoin de savoir ce que les observateurs font de l'info — il les notifie, point.
 
-**Exemple de Code :**
+## Concept fondamental
 
-Imaginons un scénario où nous avons un sujet (Subject) représentant un objet qui peut être observé par plusieurs observateurs (Observers). Lorsque l'état du sujet change, tous les observateurs sont notifiés et mis à jour.
+Le sujet maintient une liste d'observateurs et expose des méthodes pour s'y abonner (`addObserver`) ou s'en désabonner (`removeObserver`). Quand son état change, il appelle `notifyObservers()` qui parcourt la liste et prévient chaque observateur via une méthode commune (`update`). Le sujet et les observateurs sont faiblement couplés : le sujet ne connaît que l'interface `Observer`, pas les implémentations concrètes.
 
-Voici comment nous pourrions utiliser le design pattern Observer pour résoudre ce problème :
+## Exemple
+
+On a un capteur de température. Quand la température change, on veut que plusieurs affichages se mettent à jour automatiquement.
 
 ```java
 import java.util.ArrayList;
 import java.util.List;
 
-// Interface pour définir un observateur
 interface Observer {
-    void update(); // Méthode appelée lorsque le sujet notifie un changement
+    void update(float temperature);
 }
 
-// Classe concrète représentant un observateur
-class ConcreteObserver implements Observer {
-    private String name;
-
-    public ConcreteObserver(String name) {
-        this.name = name;
-    }
-
-    public void update() {
-        System.out.println(name + " : Notification reçue du sujet.");
-        // Effectuer des actions en réponse à la notification
-    }
-}
-
-// Interface pour définir un sujet observable
 interface Subject {
-    void addObserver(Observer observer); // Méthode pour ajouter un observateur
-    void removeObserver(Observer observer); // Méthode pour supprimer un observateur
-    void notifyObservers(); // Méthode pour notifier tous les observateurs
+    void addObserver(Observer observer);
+    void removeObserver(Observer observer);
+    void notifyObservers();
 }
 
-// Classe concrète représentant un sujet observable
-class ConcreteSubject implements Subject {
+class TemperatureSensor implements Subject {
     private List<Observer> observers = new ArrayList<>();
+    private float temperature;
 
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
+    public void addObserver(Observer observer) { observers.add(observer); }
+    public void removeObserver(Observer observer) { observers.remove(observer); }
 
     public void notifyObservers() {
-        System.out.println("Notifying observers...");
         for (Observer observer : observers) {
-            observer.update(); // Appeler la méthode update() de chaque observateur
+            observer.update(temperature);
         }
     }
 
-    // Méthode pour simuler un changement d'état
-    public void stateChanged() {
-        // Effectuer des actions pour changer l'état du sujet
-        notifyObservers(); // Notifier les observateurs du changement
+    public void setTemperature(float temperature) {
+        this.temperature = temperature;
+        notifyObservers();
     }
 }
 
-// Exemple d'utilisation du pattern Observer
+class PhoneDisplay implements Observer {
+    public void update(float temperature) {
+        System.out.println("📱 Téléphone : " + temperature + "°C");
+    }
+}
+
+class DashboardDisplay implements Observer {
+    public void update(float temperature) {
+        System.out.println("🖥️ Dashboard : " + temperature + "°C");
+    }
+}
+
 public class Main {
     public static void main(String[] args) {
-        // Création d'un sujet observable
-        ConcreteSubject subject = new ConcreteSubject();
+        TemperatureSensor sensor = new TemperatureSensor();
 
-        // Création de plusieurs observateurs
-        Observer observer1 = new ConcreteObserver("Observer 1");
-        Observer observer2 = new ConcreteObserver("Observer 2");
+        sensor.addObserver(new PhoneDisplay());
+        sensor.addObserver(new DashboardDisplay());
 
-        // Ajout des observateurs au sujet observable
-        subject.addObserver(observer1);
-        subject.addObserver(observer2);
-
-        // Simulation d'un changement d'état du sujet
-        subject.stateChanged();
+        sensor.setTemperature(22.5f);  // Les deux affichages se mettent à jour
+        sensor.setTemperature(25.0f);  // Encore une fois
     }
 }
 ```
 
-Dans cet exemple, le design pattern Observer est utilisé pour permettre à un sujet observable (`ConcreteSubject`) de maintenir une liste dynamique d'observateurs (`ConcreteObserver`). Lorsque l'état du sujet change (simulé par `stateChanged()`), le sujet notifie tous les observateurs en appelant la méthode `update()` sur chaque observateur.
+Le capteur ne connaît pas les détails des affichages. Il sait juste qu'il a des observateurs à prévenir. On peut en ajouter ou en retirer à tout moment sans toucher au code du capteur.
 
-Le pattern Observer permet d'établir des relations lâches entre les objets, où le sujet n'a pas besoin de connaître les détails spécifiques des observateurs. Cela favorise la modularité et l'évolutivité du code.
+## Avantages et inconvénients
+
+**Avantages :**
+- Couplage lâche entre le sujet et les observateurs — ils communiquent par interface
+- On peut ajouter ou retirer des observateurs à la volée, sans modifier le sujet
+- Favorise le principe Open/Closed : nouveaux observateurs sans toucher au code existant
+
+**Inconvénients :**
+- L'ordre de notification n'est pas garanti
+- Peut provoquer des cascades de mises à jour difficiles à déboguer
+- Si les observateurs ne se désinscrivent pas, risque de fuite mémoire (le sujet garde une référence)
+- Le sujet envoie la même notification à tous les observateurs, même si certains n'en ont pas besoin
+
+## Sans ce pattern
+
+Sans Observer, le sujet doit connaître explicitement chacun de ses affichages :
+
+```java
+class TemperatureSensor {
+    private PhoneDisplay phone;
+    private DashboardDisplay dashboard;
+    private LogService logger;
+
+    public void setTemperature(float temp) {
+        this.temperature = temp;
+        phone.updateScreen(temp);       // couplage direct
+        dashboard.refresh(temp);         // couplage direct
+        logger.log("temp=" + temp);      // couplage direct
+    }
+}
+```
+
+Chaque nouvel affichage oblige à modifier `TemperatureSensor` : ajouter un champ, ajouter un appel dans `setTemperature()`. Le capteur — qui ne devrait se soucier que de la température — connaît les détails de chaque affichage. Impossible d'ajouter un nouvel observateur sans recompiler le capteur.
+
+Avec l'Observer, le capteur ne connaît qu'une interface `Observer`. N'importe quel objet peut s'abonner ou se désabonner à tout moment, sans que le capteur n'en sache rien.

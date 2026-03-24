@@ -1,61 +1,64 @@
 # Practices : Naming
 
-Le "naming" (ou "nomenclature") dans le contexte du développement logiciel fait référence à la pratique de choisir des noms appropriés et significatifs pour les variables, les fonctions, les classes et autres éléments de code. Le choix de noms clairs et compréhensibles est crucial pour rendre le code lisible, maintenable et facile à comprendre pour les développeurs qui travaillent dessus.
+Bien nommer, c'est probablement la compétence la plus sous-estimée en développement. Un bon nom évite un commentaire, un mauvais nom crée de la confusion pour tous ceux qui liront le code après.
 
-## Objectifs du Naming :
+## Concept fondamental
 
-1. **Compréhension du Code :** Les noms explicites facilitent la compréhension du code par les développeurs, réduisant ainsi le temps nécessaire pour comprendre ce que fait chaque élément.
+Un bon nom est la meilleure documentation qui existe — et contrairement à un commentaire, il ne peut pas devenir obsolète tant que le code compile. Le but : que le code se lise comme une phrase. Si tu dois réfléchir plus de 2 secondes pour comprendre ce que fait une variable ou une fonction, c'est que son nom n'est pas assez clair.
 
-2. **Documentation Implémentée :** Des noms significatifs servent de documentation intégrée au code, réduisant ainsi le besoin de commentaires excessifs.
+Les règles de base :
+- **Être descriptif :** `calculateTotal` plutôt que `calc`
+- **Respecter les conventions du langage :** `getUserById` (camelCase en Java/JS), `get_user_by_id` (snake_case en Python)
+- **Éviter les abréviations ambiguës :** `numberOfUsers` plutôt que `numOfUsrs`
+- **Rester cohérent :** si on utilise `get` quelque part, on ne passe pas à `fetch` ailleurs pour la même chose
 
-3. **Réduction des Erreurs :** Des noms clairs réduisent le risque d'erreurs dues à des confusions ou à des interprétations incorrectes.
+## Exemple
 
-4. **Maintenabilité :** Des noms consistants et descriptifs facilitent la maintenance du code, en permettant aux développeurs de comprendre rapidement la logique derrière chaque composant.
-
-## Bonnes Pratiques pour le Naming :
-
-1. **Utiliser des Noms Descriptifs :** Choisissez des noms qui reflètent clairement le rôle et la fonction de l'élément dans le contexte de votre application.
-
-   Exemple : `calculateTotal` au lieu de `calc`.
-
-2. **Suivre les Conventions de Nommage :** Respectez les conventions de nommage de votre langage de programmation (par exemple, CamelCase pour les noms de méthode en Java).
-
-   Exemple : `getUserById` au lieu de `getuserbyid`.
-
-3. **Éviter les Abréviations Ambiguës :** Privilégiez la clarté en évitant les abréviations qui pourraient prêter à confusion.
-
-   Exemple : `numberOfUsers` au lieu de `numOfUsrs`.
-
-4. **Utiliser des Noms Consistants :** Maintenez une cohérence dans le choix des noms pour favoriser la lisibilité et la prévisibilité du code.
-
-   Exemple : Si vous utilisez `getUserName` dans un fichier, utilisez la même convention dans tout le code.
-
-## Exemple d'Application du Naming :
-
-Dans un contexte JavaScript, envisagez le choix de noms significatifs pour une fonction qui calcule la somme des éléments d'un tableau :
-
-```javascript
-// Mauvais exemple : nom peu descriptif et ambigu
-function calc(arr) {
-    let total = 0;
-    for (let num of arr) {
-        total += num;
-    }
-    return total;
+```java
+// ❌ On comprend rien
+public int calc(int[] arr) {
+    int t = 0;
+    for (int n : arr) { t += n; }
+    return t;
 }
 
-// Bon exemple : nom descriptif et clair
-function calculateSum(arrayOfNumbers) {
-    let sum = 0;
-    for (let number of arrayOfNumbers) {
-        sum += number;
-    }
+// ✅ Immédiatement clair
+public int calculateSum(int[] numbers) {
+    int sum = 0;
+    for (int number : numbers) { sum += number; }
     return sum;
 }
 ```
 
-Dans cet exemple, le deuxième code est plus lisible et compréhensible que le premier en raison de l'utilisation de noms descriptifs (`calculateSum` au lieu de `calc` et `arrayOfNumbers` au lieu de `arr`).
+Le deuxième se lit comme une phrase. Pas besoin de commentaire pour comprendre ce que ça fait.
 
-## Conclusion :
+## Avantages et inconvénients
 
-Le choix de noms appropriés est une pratique fondamentale dans le développement logiciel pour garantir la lisibilité, la compréhension et la maintenabilité du code. En suivant les bonnes pratiques de naming, les développeurs peuvent contribuer à améliorer la qualité globale du code et à rendre le processus de développement plus efficace.
+**Avantages :**
+- Le code est auto-documenté, réduisant le besoin de commentaires
+- Facilite la lecture et la compréhension par tous les membres de l'équipe
+- Réduit les malentendus et les erreurs d'interprétation
+
+**Inconvénients :**
+- Les noms descriptifs peuvent être longs (`calculateAverageUserSessionDuration`)
+- Trouver le bon nom prend du temps et de la réflexion
+- Les conventions varient entre langages et équipes, ce qui peut créer des frictions
+
+## Sans cette pratique
+
+Sans conventions de nommage, le code est indéchiffrable :
+
+```java
+class Mgr {
+    private List<String> lst;
+    public void proc(String s) {
+        int x = Integer.parseInt(s);
+        double r = x * 0.2;
+        lst.add(String.valueOf(r));
+    }
+}
+```
+
+`Mgr` de quoi ? `lst` de quoi ? `proc` fait quoi ? `r` représente quoi ? 6 mois plus tard, même l'auteur ne sait plus ce que cette classe fait. Chaque développeur qui passe dessus doit lire tout le code pour reconstruire le contexte.
+
+Avec de bons noms, le code se lit comme une phrase et les commentaires deviennent superflus.

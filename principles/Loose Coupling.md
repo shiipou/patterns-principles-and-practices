@@ -1,39 +1,57 @@
 # Principe : Loose Coupling
 
-Le "Loose Coupling" (ou faible couplage) est un concept de conception logicielle qui vise à réduire les dépendances entre les composants d'un système. L'objectif principal du faible couplage est de favoriser la modularité, la flexibilité et la facilité de modification du code en minimisant les interactions directes entre les différents modules ou composants.
+Le faible couplage, c'est faire en sorte que les composants d'un système soient le plus indépendants possible les uns des autres. Chaque module communique avec les autres via des interfaces bien définies, sans connaître leurs détails internes.
 
-## Concept Fondamental :
+## Concept fondamental
 
-Le faible couplage se réfère à la manière dont les composants logiciels interagissent les uns avec les autres. Un faible couplage signifie que les composants sont relativement indépendants les uns des autres et communiquent de manière limitée et bien définie. Cela permet d'isoler les changements effectués dans un composant sans affecter les autres, ce qui facilite la maintenance, l'évolutivité et la réutilisation du code.
+Le faible couplage se réfère à la manière dont les composants logiciels interagissent. Quand les modules sont fortement couplés, modifier l'un casse l'autre. Avec un faible couplage, on peut changer l'implémentation d'un module sans toucher au reste — tant que l'interface est respectée.
 
-## Principes Clés :
+Pour y arriver :
+- Passer par des interfaces ou des classes abstraites plutôt que des classes concrètes
+- Utiliser l'injection de dépendances pour fournir les dépendances de l'extérieur
+- Communiquer entre modules via des événements ou des messages plutôt que des appels directs
+- Utiliser des patterns comme Observer ou Strategy pour déléguer des fonctionnalités à des composants externes
 
-1. **Indépendance :** Les composants doivent être autonomes et ne pas dépendre étroitement les uns des autres pour fonctionner.
+Le faible couplage va souvent de pair avec la haute cohésion : des modules bien découpés, chacun responsable d'un sujet précis, qui communiquent entre eux par contrat.
 
-2. **Interfaces Définies :** Les interactions entre les composants doivent être définies par des interfaces claires et bien documentées.
+## Exemple
 
-3. **Réduction des Effets de Bord :** Le faible couplage réduit les effets de bord en limitant la propagation des changements à travers le système.
+Dans un site e-commerce, le module de commandes ne devrait pas appeler directement les méthodes internes du module de paiement. Il passe par une interface `PaymentService`. Si demain on change de prestataire de paiement, le module de commandes ne bouge pas — on remplace juste l'implémentation derrière l'interface.
 
-## Avantages du Faible Couplage :
+Même logique pour le module de gestion des utilisateurs : il expose une interface pour créer, modifier et supprimer des utilisateurs, mais il ne connaît pas les détails d'implémentation des autres modules.
 
-- **Modularité :** Les composants peuvent être développés, testés et déployés de manière indépendante.
-- **Réutilisabilité :** Les composants faiblement couplés sont plus faciles à réutiliser dans d'autres parties du système ou dans d'autres projets.
-- **Évolutivité :** Les modifications apportées à un composant n'affectent pas les autres, ce qui facilite l'ajout de nouvelles fonctionnalités ou l'adaptation du système à de nouveaux besoins.
+## Avantages et inconvénients
 
-## Exemple :
+**Avantages :**
+- Les composants peuvent être développés, testés et déployés indépendamment
+- Les composants faiblement couplés sont plus faciles à réutiliser dans d'autres projets
+- Les modifications dans un composant n'affectent pas les autres
+- Réduit les effets de bord et la propagation des changements
 
-Imaginons un système de commerce électronique où les modules de gestion des utilisateurs, de gestion des commandes et de paiement sont conçus avec un faible couplage :
+**Inconvénients :**
+- Ajoute de l'indirection (interfaces, événements) qui peut rendre le code plus difficile à suivre
+- Peut complexifier l'architecture si on découple des choses qui n'en ont pas besoin
+- Nécessite une bonne conception des interfaces — un mauvais contrat couplé à une interface ne résout rien
 
-- Le module de gestion des utilisateurs expose une interface pour créer, modifier et supprimer des utilisateurs, mais il ne connaît pas les détails d'implémentation des autres modules.
+## Sans ce principe
 
-- Le module de gestion des commandes utilise des interfaces définies par le module de paiement pour effectuer des transactions sans avoir à connaître les détails spécifiques du traitement des paiements.
+Sans faible couplage, chaque classe instancie directement ses dépendances :
 
-En utilisant le faible couplage, chaque module peut évoluer indépendamment des autres, ce qui facilite la maintenance du système et permet d'introduire de nouvelles fonctionnalités de manière modulaire.
+```java
+class OrderService {
+    public void placeOrder(Order order) {
+        MySQLDatabase db = new MySQLDatabase();
+        db.save(order);
 
-## Stratégies pour Réduire le Couplage :
+        SmtpEmailSender sender = new SmtpEmailSender("smtp.gmail.com");
+        sender.send(order.getEmail(), "Commande confirmée");
 
-- Utilisation d'interfaces et de classes abstraites pour définir des contrats entre les composants.
-- Injection de dépendances (Dependency Injection) pour fournir des dépendances externes aux composants.
-- Utilisation de modèles de conception tels que le pattern Observer ou le pattern Strategy pour déléguer des fonctionnalités spécifiques à des composants externes.
+        StripePayment stripe = new StripePayment();
+        stripe.charge(order.getTotal());
+    }
+}
+```
 
-En résumé, le faible couplage est un principe fondamental de la conception logicielle qui favorise la modularité, la flexibilité et la robustesse du système en réduisant les dépendances entre les composants. Cela permet de créer des systèmes plus évolutifs et plus faciles à maintenir sur le long terme.
+Changer Gmail pour SendGrid ? Modifier `OrderService`. Changer Stripe pour PayPal ? Modifier `OrderService`. Tester sans envoyer de vrais emails ? Impossible. Cette classe est couplée à 3 implémentations concrètes.
+
+Avec un faible couplage, `OrderService` dépend d'interfaces (`Database`, `EmailSender`, `PaymentGateway`). On peut changer l'implémentation, mocker pour les tests, ou remplacer un fournisseur sans toucher à la logique métier.

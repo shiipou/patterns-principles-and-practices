@@ -1,70 +1,99 @@
 # Design Pattern : Strategy
 
-Le design pattern Strategy est un pattern comportemental qui permet de définir une famille d'algorithmes, d'encapsuler chacun d'eux et de les rendre interchangeables. Ainsi, un client peut choisir l'algorithme à utiliser à tout moment sans modifier le code qui l'utilise.
+Le Strategy permet de définir une famille d'algorithmes interchangeables. On encapsule chaque algorithme dans sa propre classe et on laisse le code client choisir lequel utiliser — sans `if/else` ni `switch`.
 
-**Exemple de Code :**
+## Concept fondamental
 
-Imaginons un scénario où nous avons une application de tri de listes et nous voulons permettre à l'utilisateur de choisir différents algorithmes de tri (comme le tri bulle, le tri rapide, le tri fusion, etc.) de manière dynamique.
+On définit une interface commune pour tous les algorithmes de la famille. Chaque algorithme est implémenté dans une classe concrète. Le contexte (la classe qui utilise l'algorithme) possède une référence vers cette interface et délègue le travail. On peut changer de stratégie à tout moment via un setter, même à l'exécution.
 
-Voici comment nous pourrions utiliser le design pattern Strategy pour résoudre ce problème :
+La différence avec le State : le State change de comportement automatiquement (en interne), le Strategy est choisi explicitement par le client.
+
+## Exemple
+
+Une appli de navigation propose plusieurs modes de transport. Selon le mode choisi, le calcul d'itinéraire est différent.
 
 ```java
-// Interface pour définir un algorithme de tri
-interface SortingStrategy {
-    void sort(int[] array);
+interface RouteStrategy {
+    void calculateRoute(String from, String to);
 }
 
-// Implémentation concrète d'un algorithme de tri : Tri Bulle
-class BubbleSort implements SortingStrategy {
-    public void sort(int[] array) {
-        System.out.println("Tri bulle en cours...");
-        // Implémentation du tri bulle
+class CarRoute implements RouteStrategy {
+    public void calculateRoute(String from, String to) {
+        System.out.println("🚗 Route en voiture de " + from + " à " + to);
     }
 }
 
-// Implémentation concrète d'un algorithme de tri : Tri Rapide
-class QuickSort implements SortingStrategy {
-    public void sort(int[] array) {
-        System.out.println("Tri rapide en cours...");
-        // Implémentation du tri rapide
+class BikeRoute implements RouteStrategy {
+    public void calculateRoute(String from, String to) {
+        System.out.println("🚲 Itinéraire vélo de " + from + " à " + to);
     }
 }
 
-// Contexte utilisant la stratégie de tri
-class Sorter {
-    private SortingStrategy sortingStrategy;
-
-    public void setSortingStrategy(SortingStrategy sortingStrategy) {
-        this.sortingStrategy = sortingStrategy;
-    }
-
-    public void performSort(int[] array) {
-        if (sortingStrategy != null) {
-            sortingStrategy.sort(array); // Utilisation de l'algorithme de tri choisi
-        } else {
-            System.out.println("Veuillez définir une stratégie de tri.");
-        }
+class WalkRoute implements RouteStrategy {
+    public void calculateRoute(String from, String to) {
+        System.out.println("🚶 Trajet à pied de " + from + " à " + to);
     }
 }
 
-// Exemple d'utilisation du pattern Strategy
+class Navigator {
+    private RouteStrategy strategy;
+
+    public void setStrategy(RouteStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void navigate(String from, String to) {
+        strategy.calculateRoute(from, to);
+    }
+}
+
 public class Main {
     public static void main(String[] args) {
-        Sorter sorter = new Sorter();
+        Navigator nav = new Navigator();
 
-        // Utilisation du tri bulle
-        sorter.setSortingStrategy(new BubbleSort());
-        int[] array1 = {5, 2, 8, 1, 9};
-        sorter.performSort(array1);
+        nav.setStrategy(new CarRoute());
+        nav.navigate("Paris", "Lyon");
 
-        // Utilisation du tri rapide
-        sorter.setSortingStrategy(new QuickSort());
-        int[] array2 = {10, 4, 7, 3, 6};
-        sorter.performSort(array2);
+        nav.setStrategy(new BikeRoute());
+        nav.navigate("Paris", "Versailles");
     }
 }
 ```
 
-Dans cet exemple, le design pattern Strategy est utilisé pour encapsuler les différents algorithmes de tri (`BubbleSort` et `QuickSort`) dans des classes distinctes implémentant l'interface `SortingStrategy`. La classe `Sorter` utilise une instance de `SortingStrategy` pour exécuter un tri sur un tableau donné en utilisant l'algorithme spécifié.
+Le `Navigator` ne connaît aucun détail de calcul — il délègue tout à la stratégie. On peut changer de stratégie à la volée, et en ajouter de nouvelles (transport en commun, trottinette...) sans toucher au code existant.
 
-L'avantage du pattern Strategy est qu'il permet de changer dynamiquement l'algorithme de tri utilisé sans modifier le code de `Sorter` ou du client. Cela rend le code plus flexible, modulaire et extensible.
+## Avantages et inconvénients
+
+**Avantages :**
+- Permet de changer d'algorithme dynamiquement à l'exécution
+- Chaque algorithme est isolé dans sa propre classe — facile à tester et à maintenir
+- Respecte le principe Open/Closed : ajouter une stratégie ne modifie rien d'existant
+- Élimine les chaînes de `if/else` pour choisir un algorithme
+
+**Inconvénients :**
+- Multiplie les classes si on a beaucoup de stratégies
+- Le client doit connaître les différentes stratégies disponibles pour choisir la bonne
+- Peut être du sur-engineering si l'algorithme ne change jamais
+
+## Sans ce pattern
+
+Sans Strategy, tous les algorithmes sont dans la même classe :
+
+```java
+class Navigator {
+    public Route calculateRoute(String from, String to, String mode) {
+        if (mode.equals("car")) {
+            // 50 lignes : routes principales, autoroutes, péages...
+        } else if (mode.equals("bike")) {
+            // 40 lignes : pistes cyclables, dénivelé...
+        } else if (mode.equals("walk")) {
+            // 30 lignes : chemins piétons, parcs, escaliers...
+        }
+        // Nouveau mode de transport → on touche cette méthode
+    }
+}
+```
+
+La classe `Navigator` grossit à chaque nouveau mode de transport. Modifier l'algo vélo risque de casser celui de la voiture (même méthode). Et il est impossible de tester un algorithme sans instancier tout le `Navigator`.
+
+Avec Strategy, chaque algorithme est une classe isolée. On peut les tester, les modifier et en ajouter indépendamment.

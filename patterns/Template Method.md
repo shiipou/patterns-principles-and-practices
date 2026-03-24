@@ -1,81 +1,96 @@
 # Design Pattern : Template Method
 
-Le design pattern Template Method est un pattern comportemental qui définit le squelette d'un algorithme dans une méthode, en laissant certaines étapes aux sous-classes. Cela permet aux sous-classes de redéfinir certaines étapes de l'algorithme sans changer sa structure globale.
+Le Template Method définit le squelette d'un algorithme dans une classe parente, en laissant les sous-classes redéfinir certaines étapes. La structure globale est figée, mais les détails sont personnalisables.
 
-**Exemple de Code :**
+## Concept fondamental
 
-Imaginons un scénario où nous avons une classe abstraite `Recipe` représentant une recette de cuisine avec des étapes standardisées, mais permettant aux sous-classes de personnaliser certaines étapes spécifiques.
+La classe parente contient une méthode "template" (souvent `final`) qui définit l'ordre des étapes de l'algorithme. Certaines étapes sont implémentées directement (comportement commun), d'autres sont déclarées abstraites et laissées aux sous-classes. Le `final` garantit que personne ne peut changer l'ordre des étapes — seul le contenu de chaque étape varie.
 
-Voici comment nous pourrions utiliser le design pattern Template Method pour résoudre ce problème :
+C'est l'inverse de la Strategy : ici c'est la classe parente qui contrôle le flux, les sous-classes ne font que remplir les trous.
+
+## Exemple
+
+On a une recette de boisson chaude. Les étapes sont toujours les mêmes (bouillir l'eau, infuser, verser, ajouter les extras), mais le contenu de chaque étape varie selon qu'on prépare un café ou un thé.
 
 ```java
-// Classe abstraite représentant une recette
-abstract class Recipe {
-    // Méthode Template qui définit le processus de préparation de la recette
-    public void prepareRecipe() {
-        boilWater(); // Faire bouillir de l'eau
-        brew(); // Infuser ou préparer l'ingrédient principal
-        pourInCup(); // Verser dans une tasse
-        addCondiments(); // Ajouter des condiments ou des garnitures
+abstract class HotBeverage {
+    // Le template : l'ordre est fixe
+    public final void prepare() {
+        boilWater();
+        brew();
+        pourInCup();
+        addExtras();
     }
 
-    // Méthode abstraite à implémenter par les sous-classes
+    private void boilWater() { System.out.println("Faire bouillir l'eau"); }
+    private void pourInCup() { System.out.println("Verser dans la tasse"); }
+
+    // Ces étapes sont laissées aux sous-classes
     abstract void brew();
-
-    // Méthode abstraite à implémenter par les sous-classes
-    abstract void addCondiments();
-
-    // Méthode concrète pour faire bouillir de l'eau
-    void boilWater() {
-        System.out.println("Faire bouillir de l'eau");
-    }
-
-    // Méthode concrète pour verser dans une tasse
-    void pourInCup() {
-        System.out.println("Verser dans une tasse");
-    }
+    abstract void addExtras();
 }
 
-// Implémentation concrète d'une recette : Café
-class CoffeeRecipe extends Recipe {
-    void brew() {
-        System.out.println("Infuser du café moulu");
-    }
-
-    void addCondiments() {
-        System.out.println("Ajouter du lait et du sucre selon les préférences");
-    }
+class Coffee extends HotBeverage {
+    void brew() { System.out.println("Infuser le café moulu"); }
+    void addExtras() { System.out.println("Ajouter du lait et du sucre"); }
 }
 
-// Implémentation concrète d'une recette : Thé
-class TeaRecipe extends Recipe {
-    void brew() {
-        System.out.println("Infuser du thé dans de l'eau chaude");
-    }
-
-    void addCondiments() {
-        System.out.println("Ajouter du citron ou du miel selon les préférences");
-    }
+class Tea extends HotBeverage {
+    void brew() { System.out.println("Infuser le thé"); }
+    void addExtras() { System.out.println("Ajouter du citron"); }
 }
 
-// Exemple d'utilisation du pattern Template Method
 public class Main {
     public static void main(String[] args) {
-        // Préparation d'une recette de café
-        Recipe coffeeRecipe = new CoffeeRecipe();
-        System.out.println("Recette de Café :");
-        coffeeRecipe.prepareRecipe();
+        HotBeverage coffee = new Coffee();
+        coffee.prepare();
 
-        System.out.println();
+        System.out.println("---");
 
-        // Préparation d'une recette de thé
-        Recipe teaRecipe = new TeaRecipe();
-        System.out.println("Recette de Thé :");
-        teaRecipe.prepareRecipe();
+        HotBeverage tea = new Tea();
+        tea.prepare();
     }
 }
 ```
 
-Dans cet exemple, le design pattern Template Method est utilisé pour définir le processus standard de préparation d'une recette (`prepareRecipe()`) dans la classe abstraite `Recipe`. Les étapes spécifiques comme l'infusion (`brew()`) et l'ajout de condiments (`addCondiments()`) sont laissées à implémenter par les sous-classes (`CoffeeRecipe` et `TeaRecipe`).
+La méthode `prepare()` est `final` — personne ne peut changer l'ordre des étapes. Par contre, `brew()` et `addExtras()` sont abstraites : c'est la sous-classe qui décide quoi mettre dedans. Le squelette reste identique, seuls les détails changent.
 
-Le pattern Template Method permet de définir un squelette d'algorithme dans une classe de manière à ce que les étapes spécifiques puissent être redéfinies par les sous-classes sans changer la structure globale de l'algorithme.
+## Avantages et inconvénients
+
+**Avantages :**
+- L'algorithme est défini une seule fois dans la classe parente — pas de duplication
+- Le `final` protège la structure de l'algorithme contre les modifications accidentelles
+- Les sous-classes n'ont qu'à implémenter les étapes spécifiques, pas tout l'algorithme
+
+**Inconvénients :**
+- La hiérarchie d'héritage peut devenir rigide si l'algorithme évolue beaucoup
+- Les sous-classes sont fortement couplées à la classe parente
+- Si le nombre d'étapes personnalisables est grand, l'interface de la classe abstraite devient lourde
+
+## Sans ce pattern
+
+Sans Template Method, les classes similaires dupliquent toute la structure :
+
+```java
+class CoffeeMaker {
+    public void prepare() {
+        boilWater();           // commun
+        brewCoffee();          // spécifique
+        pourInCup();           // commun
+        addSugar();            // spécifique
+    }
+}
+
+class TeaMaker {
+    public void prepare() {
+        boilWater();           // commun (dupliqué)
+        steepTea();            // spécifique
+        pourInCup();           // commun (dupliqué)
+        addLemon();            // spécifique
+    }
+}
+```
+
+`boilWater()` et `pourInCup()` sont copiés-collés dans chaque classe. Si la logique de `boilWater()` change (nouvelle température, timer, log), il faut modifier chaque maker. Et rien ne garantit que toutes les classes respectent le même ordre d'étapes.
+
+Avec le Template Method, la classe abstraite fixe le squelette (`prepare()` est `final`) et les sous-classes ne redéfinissent que les étapes spécifiques. Le code commun vit à un seul endroit.

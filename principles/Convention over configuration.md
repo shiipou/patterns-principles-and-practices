@@ -1,32 +1,60 @@
 # Principe : Convention over Configuration
 
-Le principe "Convention over Configuration" (CoC) est un concept de développement logiciel qui encourage les développeurs à adopter des conventions ou des règles préétablies plutôt que de spécifier explicitement chaque configuration. Ce principe vise à réduire la complexité en minimisant les décisions de configuration nécessaires pour démarrer ou utiliser un framework, une bibliothèque ou un outil.
+L'idée est simple : au lieu de tout configurer à la main, on suit des conventions par défaut. Le framework prend des décisions automatiques tant qu'on respecte ses conventions. On ne configure que ce qui déroge à la norme.
 
-## Concept Fondamental :
+## Concept fondamental
 
-Le concept de "Convention over Configuration" repose sur l'idée que de nombreuses décisions de configuration peuvent être prises de manière implicite ou automatique en suivant des conventions standard. En d'autres termes, au lieu de devoir spécifier chaque détail de configuration, les développeurs peuvent se concentrer sur la logique métier principale en suivant les conventions acceptées par le framework ou l'outil utilisé.
+Les frameworks et outils définissent des conventions standard (nommage des fichiers, structure des répertoires, comportements par défaut). Tant que le développeur les respecte, tout fonctionne sans configuration explicite. On ne configure que ce qui sort de l'ordinaire. Ça réduit le bruit et permet de se concentrer sur la logique métier plutôt que sur la plomberie.
 
-## Principes Clés :
+## Exemple
 
-1. **Définition de Conventions :** Les frameworks ou outils définissent des conventions par défaut qui sont largement acceptées et suivies par la communauté.
+Ruby on Rails est le cas d'école. Si tu crées un modèle `User`, Rails s'attend à ce que la table en base s'appelle `users`, le contrôleur `UsersController`, et les vues soient dans `app/views/users/`. Tu n'as rien à configurer pour que ça marche.
 
-2. **Réduction de la Configuration :** Les développeurs n'ont besoin de spécifier que les configurations qui dérogent aux conventions par défaut.
+Même logique avec Spring Boot en Java : tu poses un `application.properties` dans `src/main/resources/`, tu respectes la structure de packages, et le framework se débrouille. Pas de XML, pas de config manuelle.
 
-3. **Productivité Améliorée :** En réduisant la configuration manuelle, les développeurs peuvent se concentrer davantage sur le développement de fonctionnalités et la résolution de problèmes métier.
+Le principe s'applique aussi à plus petite échelle : dans un projet d'équipe, se mettre d'accord sur une arborescence de fichiers, un format de nommage ou un style de code, c'est déjà de la convention over configuration.
 
-## Exemple :
+## Avantages et inconvénients
 
-Un exemple courant de "Convention over Configuration" est le framework Ruby on Rails, qui suit des conventions strictes pour structurer les applications web. Par exemple :
+**Avantages :**
+- Réduit la quantité de configuration nécessaire pour démarrer un projet
+- Favorise l'uniformité et la cohérence du code entre développeurs
+- Gain de temps : on se concentre sur le code qui a de la valeur
 
-- Les noms de fichiers et de répertoires sont standardisés (par exemple, `app/models` pour les modèles, `app/controllers` pour les contrôleurs).
-- Les noms de classes et de méthodes suivent des conventions spécifiques pour les opérations CRUD (Create, Read, Update, Delete).
+**Inconvénients :**
+- Peut être contraignant si les conventions ne correspondent pas au besoin
+- Courbe d'apprentissage : il faut connaître les conventions pour être productif
+- Effet "magie noire" : quand tout est implicite, il est parfois difficile de comprendre ce qui se passe en coulisses
 
-En suivant ces conventions, un développeur Rails peut créer rapidement une application web sans avoir à spécifier chaque détail de configuration, car le framework utilise les conventions par défaut pour prendre des décisions automatiques sur la structure et le comportement de l'application.
+## Sans ce principe
 
-## Avantages de "Convention over Configuration" :
+Sans convention, on configure tout à la main :
 
-- **Réduction de la Complexité :** Les décisions de configuration implicites simplifient le processus de développement.
-- **Uniformité :** Les conventions standardisées favorisent la cohérence et la lisibilité du code.
-- **Gain de Temps :** Moins de configuration manuelle signifie une productivité accrue.
+```java
+// Sans convention — configuration manuelle de chaque servlet
+public class AppConfig {
+    public void configure(ServletContext ctx) {
+        ServletRegistration.Dynamic userServlet =
+            ctx.addServlet("UserServlet", new UserServlet());
+        userServlet.addMapping("/users");
 
-En résumé, le principe "Convention over Configuration" encourage les développeurs à adopter des conventions préétablies pour réduire la configuration manuelle et favoriser une approche plus productive du développement logiciel. Cela permet de simplifier les processus de développement tout en maintenant la cohérence et la qualité du code.
+        ServletRegistration.Dynamic orderServlet =
+            ctx.addServlet("OrderServlet", new OrderServlet());
+        orderServlet.addMapping("/orders");
+
+        // ... répété pour chaque endpoint
+    }
+}
+
+// Avec convention (Spring Boot) — le framework fait le mapping tout seul
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    @GetMapping
+    public List<User> getUsers() { /* ... */ }
+}
+```
+
+50 lignes de configuration manuelle remplacées par deux annotations. Avec Spring Boot, le framework fait le reste tout seul.
+
+Sans conventions, chaque développeur de l'équipe structure aussi son projet différemment. On perd du temps à chercher où sont les choses au lieu de coder.

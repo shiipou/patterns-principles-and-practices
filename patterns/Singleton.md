@@ -1,55 +1,80 @@
 # Design Pattern : Singleton
 
-Le Singleton est un design pattern de création qui garantit qu'une classe n'a qu'une seule instance et fournit un point d'accès global à cette instance.
+Le Singleton garantit qu'une classe n'a qu'une seule instance dans toute l'application, et fournit un accès global à cette instance. Le constructeur est privé : impossible d'instancier la classe de l'extérieur.
 
-**Exemple de Code :**
+## Concept fondamental
 
-Voici un exemple d'implémentation du Singleton en Java :
+Le constructeur de la classe est déclaré `private`, ce qui empêche toute instanciation depuis l'extérieur. Une méthode statique `getInstance()` vérifie si une instance existe déjà : si oui, elle la retourne ; sinon, elle en crée une. Résultat : peu importe combien de fois on appelle `getInstance()`, on obtient toujours le même objet.
+
+## Exemple
+
+Un cas classique : un gestionnaire de configuration qu'on veut unique dans toute l'appli.
 
 ```java
-public class Singleton {
-    // Instance unique privée
-    private static Singleton instance;
+public class AppConfig {
+    private static AppConfig instance;
+    private String databaseUrl;
 
-    // Constructeur privé pour empêcher l'instanciation directe depuis l'extérieur
-    private Singleton() {
-        // Initialisation de la classe Singleton
+    // Constructeur privé = pas de new AppConfig() depuis l'extérieur
+    private AppConfig() {
+        this.databaseUrl = "jdbc:postgresql://localhost:5432/mydb";
     }
 
-    // Méthode statique pour obtenir l'instance unique
-    public static Singleton getInstance() {
-        // Créer l'instance si elle n'existe pas encore
+    public static AppConfig getInstance() {
         if (instance == null) {
-            instance = new Singleton();
+            instance = new AppConfig();
         }
         return instance;
     }
 
-    // Méthode utilitaire de la classe Singleton
-    public void doSomething() {
-        System.out.println("Singleton instance doing something...");
+    public String getDatabaseUrl() {
+        return databaseUrl;
     }
 }
 
-// Exemple d'utilisation du Singleton
 public class Main {
     public static void main(String[] args) {
-        // Obtention de l'instance unique du Singleton
-        Singleton singleton = Singleton.getInstance();
+        AppConfig config = AppConfig.getInstance();
+        System.out.println(config.getDatabaseUrl());
 
-        // Utilisation de l'instance Singleton
-        singleton.doSomething();
-
-        // Tentative d'instanciation directe (non possible car le constructeur est privé)
-        // Singleton anotherInstance = new Singleton(); // Erreur de compilation
-
-        // Obtention de la même instance à partir de n'importe où dans le code
-        Singleton anotherSingleton = Singleton.getInstance();
-        anotherSingleton.doSomething(); // Utilisation de la même instance
+        // Même instance partout
+        AppConfig config2 = AppConfig.getInstance();
+        System.out.println(config == config2); // true
     }
 }
 ```
 
-Dans cet exemple, la classe `Singleton` possède une instance statique privée et un constructeur privé, ce qui empêche l'instanciation directe depuis l'extérieur de la classe. La méthode `getInstance()` fournit le point d'accès global à l'instance unique du Singleton. La première fois que `getInstance()` est appelée, elle crée une nouvelle instance de `Singleton`, et les appels suivants renvoient simplement cette instance déjà créée.
+`AppConfig.getInstance()` retourne toujours la même instance. Le constructeur privé empêche toute instanciation directe.
 
-Le pattern Singleton est couramment utilisé lorsque vous avez besoin d'une seule instance partagée dans toute l'application, comme un gestionnaire de connexions à une base de données ou un gestionnaire de configuration.
+⚠️ Attention : cette version simple n'est pas thread-safe. En multi-thread, deux appels simultanés à `getInstance()` pourraient créer deux instances. Pour y remédier, on peut synchroniser la méthode ou utiliser le pattern "holder" avec une classe interne.
+
+## Avantages et inconvénients
+
+**Avantages :**
+- Garantit une instance unique partagée dans toute l'application
+- Accès global simple via `getInstance()`
+- L'instance n'est créée que si elle est vraiment utilisée (lazy initialization)
+
+**Inconvénients :**
+- Rend le code plus difficile à tester (difficulté à mocker l'instance)
+- Introduit un état global, ce qui peut masquer des dépendances entre classes
+- Problèmes de thread-safety si l'implémentation n'est pas soignée
+- Souvent considéré comme un anti-pattern quand il est utilisé abusivement
+
+## Sans ce pattern
+
+Sans Singleton, rien n'empêche de créer plusieurs instances là où une seule devrait exister :
+
+```java
+// Dans le module A
+AppConfig configA = new AppConfig("config.yml");
+configA.set("debug", true);
+
+// Dans le module B
+AppConfig configB = new AppConfig("config.yml");
+System.out.println(configB.get("debug")); // false — incohérent !
+```
+
+Deux instances lisent le même fichier mais ne partagent pas leur état en mémoire. L'une active le mode debug, l'autre ne le voit pas. Le même problème se pose pour un pool de connexions (on crée plusieurs pools au lieu d'un seul) ou un logger (les logs partent dans des fichiers différents).
+
+Avec le Singleton, `AppConfig.getInstance()` retourne toujours la même instance. Tout le monde partage le même état.

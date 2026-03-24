@@ -1,51 +1,50 @@
 # Practices : Retrospective
 
-La rétrospective (ou retrospective meeting) est une pratique essentielle dans le développement logiciel agile, visant à réfléchir sur le déroulement d'une itération ou d'un projet et à identifier les points positifs, les points d'amélioration et les actions à entreprendre pour favoriser l'amélioration continue de l'équipe et du processus de développement.
+La rétro, c'est le moment où l'équipe prend du recul à la fin d'un sprint ou d'un projet pour se demander : qu'est-ce qui a bien marché ? Qu'est-ce qui a foiré ? Qu'est-ce qu'on change pour la prochaine fois ?
 
-## Objectifs de la Rétrospective :
+## Concept fondamental
 
-1. **Réflexion Collective :** Permettre à l'équipe de réfléchir ensemble sur ce qui s'est bien passé et ce qui peut être amélioré.
+La rétrospective est le mécanisme d'amélioration continue de l'équipe. L'idée est de réfléchir collectivement sur ce qui s'est passé, d'identifier les problèmes, et de décider d'actions concrètes pour les résoudre. Sans rétro, on répète les mêmes erreurs sprint après sprint.
 
-2. **Identification des Opportunités d'Amélioration :** Mettre en lumière les problèmes rencontrés et proposer des solutions pour les résoudre.
+Ce qui fait une bonne rétro :
+- Un climat de confiance où chacun peut parler sans crainte
+- Des actions concrètes et réalistes, pas juste des constats
+- Un suivi réel d'un sprint à l'autre
+- Un facilitateur qui s'assure que tout le monde s'exprime
 
-3. **Renforcement de l'Engagement :** Favoriser la responsabilité collective et l'engagement de l'équipe envers l'amélioration continue.
+## Exemple
 
-4. **Apprentissage et Adaptation :** Encourager l'apprentissage et l'adaptation en fonction des expériences vécues.
+Le déroulement classique :
+1. Chacun partage ses retours — ce qui a été positif, ce qui a posé problème
+2. L'équipe identifie les sujets les plus importants
+3. On décide d'actions concrètes avec des responsables
+4. Au sprint suivant, on vérifie si les actions ont été mises en place
 
-## Déroulement d'une Rétrospective :
+Quelques formats populaires :
+- **Start, Stop, Continue** — qu'est-ce qu'on commence à faire, qu'est-ce qu'on arrête, qu'est-ce qu'on continue
+- **Glad, Sad, Mad** — ce qui nous rend contents, tristes ou frustrés
+- **4L** — Liked, Learned, Lacked, Longed for
 
-1. **Préparation :** Le facilitateur de la rétrospective prépare l'agenda et les activités à réaliser pendant la réunion.
+Exemple concret : à la fin d'un sprint, l'équipe constate que les reviews de code prennent trop de temps. Action décidée : limiter les PRs à 300 lignes max et assigner un reviewer dès la création de la PR.
 
-2. **Collecte de Rétroactions :** Les membres de l'équipe partagent leurs retours d'expérience sur l'itération ou le projet, en mettant en évidence ce qui a bien fonctionné et ce qui peut être amélioré.
+## Avantages et inconvénients
 
-3. **Identification des Actions :** L'équipe identifie les actions concrètes à entreprendre pour résoudre les problèmes identifiés et améliorer les pratiques.
+**Avantages :**
+- Favorise une culture d'amélioration continue
+- Renforce la collaboration et la responsabilité collective
+- Permet d'identifier rapidement les problèmes et de prendre des mesures correctives
+- Fournit un canal pour un feedback constructif et ouvert
 
-4. **Planification :** Les actions sont planifiées avec des responsables et des délais pour assurer leur mise en œuvre.
+**Inconvénients :**
+- Peut devenir un rituel vide si les actions ne sont jamais suivies
+- Certaines personnes n'osent pas s'exprimer en groupe
+- Prend du temps et peut être perçu comme "encore une réunion"
+- Risque de tourner en rond sur les mêmes sujets sans résolution
 
-5. **Suivi :** Les progrès sont suivis lors des rétrospectives suivantes pour évaluer l'efficacité des actions entreprises.
+## Sans cette pratique
 
-## Formats de Rétrospective :
+Sans rétrospective, l'équipe répète les mêmes erreurs sprint après sprint. Le déploiement du vendredi a cassé la prod — encore. Les PRs restent bloquées 3 jours en attente de review — encore. Les specs arrivent incomplètes — encore.
 
-1. **Start, Stop, Continue :** Les membres de l'équipe identifient ce qu'ils veulent commencer à faire, arrêter de faire et continuer à faire.
+Personne ne prend le temps de se poser la question : "Qu'est-ce qu'on pourrait changer ?" Les frustrations s'accumulent en silence, les problèmes deviennent "normaux", et l'équipe stagne.
 
-2. **Satisfaction, Insatisfaction, Suggestions (SIS) :** Les participants partagent ce qui les a satisfaits, ce qui les a mécontents et leurs suggestions d'amélioration.
-
-3. **Glad, Sad, Mad :** Les membres de l'équipe expriment ce qui les rend heureux, ce qui les rend tristes et ce qui les met en colère.
-
-## Avantages de la Rétrospective :
-
-- **Amélioration Continue :** Favorise une culture d'amélioration continue au sein de l'équipe.
-
-- **Renforcement de l'Équipe :** Renforce la collaboration et la responsabilité collective au sein de l'équipe.
-
-- **Adaptation Rapide :** Permet d'identifier rapidement les problèmes et de prendre des mesures correctives.
-
-- **Feedback Constructif :** Fournit un canal pour un feedback constructif et ouvert entre les membres de l'équipe.
-
-## Exemple de Rétrospective :
-
-À la fin d'une itération Scrum, une équipe organise une rétrospective où chaque membre partage ses impressions sur la collaboration, les obstacles rencontrés et les points à améliorer. En se basant sur ces discussions, l'équipe décide de mettre en place des sessions de pair-programming pour partager les connaissances et de clarifier les rôles et les responsabilités au sein de l'équipe pour améliorer l'efficacité globale.
-
-## Conclusion :
-
-La rétrospective est une pratique fondamentale dans le développement agile pour promouvoir l'amélioration continue et l'adaptation en fonction des expériences passées. En encourageant un feedback ouvert et constructif, les équipes peuvent identifier les opportunités d'amélioration et renforcer leur collaboration pour fournir des résultats de meilleure qualité.
+La rétro est le mécanisme qui transforme les erreurs en améliorations. Sans elle, il n'y a pas de boucle de feedback.

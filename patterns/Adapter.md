@@ -1,33 +1,37 @@
 # Design Pattern : Adapter
 
-L'adaptateur est un design pattern structurel qui permet à des interfaces incompatibles de travailler ensemble. Il permet à des classes avec des interfaces incompatibles de collaborer en les enveloppant avec un adaptateur qui offre une interface commune.
+L'Adapter est un pattern structurel qui permet de faire collaborer deux interfaces incompatibles. On enveloppe une classe existante dans un adaptateur qui expose l'interface attendue par le reste du code.
 
-**Exemple de Code :**
+## Concept fondamental
 
-Imaginons un scénario où nous avons une ancienne bibliothèque de manipulation de fichiers qui utilise une interface `FileReader` avec une méthode `readFile()`, mais nous voulons utiliser une nouvelle bibliothèque avec une interface différente `NewFileReader` avec une méthode `openFile()` et `readContent()`.
+L'adaptateur agit comme un traducteur entre deux interfaces. Il implémente l'interface que le code client attend, et en interne, il délègue les appels à l'objet "adapté" qui a une interface différente. Le code client ne sait même pas qu'il communique avec un objet adapté — il voit juste une interface qu'il connaît.
 
-Voici comment nous pourrions utiliser le design pattern Adapter pour résoudre ce problème :
+Il existe deux variantes : l'adaptateur par composition (on wrape l'objet) et l'adaptateur par héritage (on étend la classe). En pratique, la composition est largement préférée.
+
+## Exemple
+
+On a une vieille bibliothèque qui lit des fichiers via une interface `FileReader` avec une méthode `readFile()`. On veut migrer vers une nouvelle lib qui a une interface différente (`openFile()` + `readContent()`), mais sans toucher au code qui utilise `FileReader`.
 
 ```java
-// Interface de la vieille bibliothèque
+// L'ancienne interface que tout le code utilise
 interface FileReader {
     String readFile();
 }
 
-// Classe implémentant l'ancienne interface
 class OldFileReader implements FileReader {
     public String readFile() {
-        return "Contenu du fichier lu par l'ancienne bibliothèque";
+        return "Contenu lu par l'ancienne bibliothèque";
     }
 }
 
-// Interface de la nouvelle bibliothèque
+// La nouvelle lib avec une interface différente
 interface NewFileReader {
     void openFile();
     String readContent();
 }
 
-// Classe adaptateur pour utiliser la nouvelle bibliothèque avec l'ancienne interface
+// L'adaptateur : il implémente l'ancienne interface
+// mais délègue le travail à la nouvelle lib
 class Adapter implements FileReader {
     private NewFileReader newFileReader;
 
@@ -36,22 +40,56 @@ class Adapter implements FileReader {
     }
 
     public String readFile() {
-        newFileReader.openFile(); // Appelle la méthode de la nouvelle bibliothèque
-        return newFileReader.readContent(); // Appelle la méthode de la nouvelle bibliothèque
+        newFileReader.openFile();
+        return newFileReader.readContent();
     }
 }
 
-// Utilisation de l'adaptateur
 public class Main {
     public static void main(String[] args) {
-        NewFileReader newReader = new NewFileReaderImpl(); // Nouvelle bibliothèque
-        FileReader adapter = new Adapter(newReader); // Adaptateur
-        String content = adapter.readFile(); // Utilisation de l'ancienne interface avec la nouvelle bibliothèque
-        System.out.println("Contenu du fichier lu : " + content);
+        NewFileReader newReader = new NewFileReaderImpl();
+        FileReader adapter = new Adapter(newReader);
+
+        // Le code appelant ne sait pas qu'il utilise la nouvelle lib
+        String content = adapter.readFile();
+        System.out.println("Contenu : " + content);
     }
 }
 ```
 
-Dans cet exemple, l'interface `Adapter` permet à la classe `Adapter` d'utiliser la nouvelle bibliothèque `NewFileReader` en lui fournissant une interface compatible avec l'ancienne bibliothèque `FileReader`.
+Le code appelant continue d'utiliser `FileReader` comme avant. L'`Adapter` traduit les appels vers la nouvelle bibliothèque en coulisses.
 
-Cela montre comment le pattern Adapter peut être utilisé pour rendre des classes incompatibles compatibles en encapsulant la complexité de l'adaptation dans un adaptateur.
+## Avantages et inconvénients
+
+**Avantages :**
+- Permet de réutiliser du code existant sans le modifier
+- Respecte le principe Open/Closed : on ajoute un adaptateur sans toucher aux classes existantes
+- Isole la complexité de l'adaptation dans une seule classe
+
+**Inconvénients :**
+- Ajoute une couche d'indirection qui peut compliquer le débogage
+- Peut masquer des incompatibilités fondamentales entre les deux interfaces (conversion de données lossy, etc.)
+- Si on multiplie les adaptateurs, c'est souvent le signe qu'il faut repenser l'architecture
+
+## Sans ce pattern
+
+Sans Adapter, le code client est collé à l'API spécifique d'une librairie :
+
+```java
+class ReportGenerator {
+    private OldXmlParser parser = new OldXmlParser();
+
+    public Report generate(String filePath) {
+        XmlNode root = parser.readXml(filePath);
+        List<XmlNode> rows = parser.findNodes(root, "//data/row");
+        for (XmlNode row : rows) {
+            String value = parser.getAttr(row, "value");
+            // ... traitement spécifique à l'API de OldXmlParser
+        }
+    }
+}
+```
+
+Le jour où on veut passer à `NewJsonParser`, il faut réécrire toute la classe `ReportGenerator` — chaque appel à `readXml`, `findNodes`, `getAttr` doit être remplacé. Et si d'autres classes utilisent aussi `OldXmlParser`, c'est le même travail partout.
+
+Avec un Adapter, on crée une couche de traduction entre l'interface qu'on attend (`FileReader`) et la librairie réelle. Le jour où on change de lib, on remplace un seul adaptateur — le reste du code ne bouge pas.

@@ -1,53 +1,70 @@
 # Principe : Abstraction
 
-L'abstraction fait référence au processus de séparation des idées essentielles ou des fonctionnalités d'un concept, sans se soucier des détails concrets ou de mise en œuvre. C'est un principe clé de la programmation orientée objet et de la conception logicielle qui permet de modéliser des concepts du monde réel de manière simplifiée et de représenter des entités logicielles de manière plus générale.
+L'abstraction, c'est le fait de ne garder que l'essentiel d'un concept en cachant les détails d'implémentation. On modélise "ce que ça fait" sans se soucier de "comment ça le fait".
 
-## Concept Fondamental :
+## Concept fondamental
 
-Le concept d'abstraction permet aux développeurs de se concentrer sur les aspects importants et pertinents d'un problème sans être distraits par les détails spécifiques qui ne sont pas nécessaires à un moment donné. Il s'agit d'une technique puissante pour organiser et structurer le code de manière à améliorer la lisibilité, la maintenance et la réutilisabilité.
+Abstraire, c'est choisir ce qu'on expose et ce qu'on cache. En Java, ça passe par les interfaces (qui définissent un contrat sans implémentation) et les classes abstraites (qui fixent certains comportements et en laissent d'autres aux sous-classes). L'abstraction permet de se concentrer sur les aspects importants d'un problème sans se noyer dans les détails techniques.
 
-## Exemples d'Abstraction :
+Elle s'applique aussi à la modélisation : quand on représente un objet du monde réel dans le code, on ne garde que les propriétés utiles pour le système.
 
-1. **Interfaces :** Les interfaces en programmation définissent un contrat ou un ensemble de comportements sans spécifier l'implémentation détaillée. Elles permettent de définir des types abstraits que les classes peuvent implémenter.
+## Exemple
 
-   ```java
-   public interface Shape {
-       double getArea();
-       double getPerimeter();
-   }
-   ```
+```java
+// L'interface dit "ce que ça fait" : calculer une aire et un périmètre
+public interface Shape {
+    double getArea();
+    double getPerimeter();
+}
 
-2. **Classes Abstraites :** Les classes abstraites sont des classes qui ne peuvent pas être instanciées directement, mais qui peuvent contenir des méthodes abstraites (non implémentées) ainsi que des méthodes concrètes.
+// La classe abstraite peut fixer certains comportements
+// et en laisser d'autres aux sous-classes
+public abstract class Animal {
+    public abstract void makeSound();
 
-   ```java
-   public abstract class Animal {
-       public abstract void makeSound();
-       public void eat() {
-           System.out.println("Animal is eating");
-       }
-   }
-   ```
+    public void eat() {
+        System.out.println("L'animal mange.");
+    }
+}
+```
 
-3. **Modélisation de Concepts :** En modélisant des entités du monde réel, nous utilisons l'abstraction pour capturer les caractéristiques importantes sans se soucier des détails spécifiques.
+On peut aussi parler d'abstraction quand on modélise un objet du monde réel en ne gardant que les propriétés utiles :
 
-   Par exemple, un système de gestion de bibliothèque pourrait utiliser l'abstraction pour représenter un livre de la manière suivante :
+```java
+public class Book {
+    private String title;
+    private String author;
+    private int numberOfPages;
+}
+```
 
-   ```java
-   public class Book {
-       private String title;
-       private String author;
-       private int numberOfPages;
+Un vrai livre a une couverture, un poids, une odeur… Mais dans notre système de bibliothèque, seuls le titre, l'auteur et le nombre de pages nous intéressent. C'est ça l'abstraction : choisir ce qu'on garde et ce qu'on ignore.
 
-       // Constructeur, getters, setters, etc.
-   }
-   ```
+## Avantages et inconvénients
 
-Dans cet exemple, la classe `Book` représente une abstraction d'un livre avec des propriétés essentielles (titre, auteur, nombre de pages), mais elle ne représente pas tous les détails complexes d'un livre réel (comme son contenu spécifique).
+**Avantages :**
+- Simplifie la compréhension du code en masquant les détails non pertinents
+- Favorise la modularité et la réutilisabilité des composants
+- Facilite l'extension et l'évolution du système sans impacter les autres parties du code
 
-## Avantages de l'Abstraction :
+**Inconvénients :**
+- Trop d'abstraction rend le code difficile à suivre ("où est l'implémentation concrète ?")
+- Peut mener à des architectures sur-ingéniériées si on abstrait des choses qui ne changeront jamais
+- Nécessite de bien choisir le bon niveau d'abstraction — trop haut ou trop bas pose problème
 
-- **Simplification :** Permet de focaliser sur les aspects importants tout en masquant les détails non pertinents.
-- **Modularité :** Encourage la création de composants indépendants et réutilisables.
-- **Flexibilité :** Facilite l'extension et l'évolution du système sans impacter les autres parties du code.
+## Sans ce principe
 
-En conclusion, l'abstraction est un concept puissant qui permet de modéliser des concepts complexes de manière simplifiée et générale, ce qui conduit à des systèmes logiciels bien structurés et flexibles. C'est un pilier de la programmation orientée objet et de la conception logicielle moderne.
+Sans abstraction, le code est collé aux implémentations concrètes :
+
+```java
+class ReportService {
+    public void generate(MySQLDatabase db) {
+        ResultSet rs = db.executeQuery("SELECT * FROM sales");
+        // ... traitement lié à MySQL
+    }
+}
+```
+
+Le jour où on veut passer à PostgreSQL, il faut modifier `ReportService` — alors que la logique de génération du rapport n'a rien à voir avec le choix de la base de données.
+
+Avec une abstraction (`Database` ou `DataSource`), `ReportService` ne connaît que l'interface. On change de base sans toucher au rapport.

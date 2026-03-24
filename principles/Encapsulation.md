@@ -1,61 +1,70 @@
 # Principe : Encapsulation
 
-L'encapsulation est un concept clé en programmation orientée objet (POO) qui implique la restriction de l'accès aux données internes d'un objet et la protection de ces données en les cachant à l'extérieur. C'est l'un des principes fondamentaux de la POO visant à regrouper les données (variables) et les méthodes (fonctions) qui manipulent ces données au sein d'une même entité, appelée objet.
+L'encapsulation consiste à cacher les données internes d'un objet et à ne les rendre accessibles qu'à travers des méthodes contrôlées. De l'extérieur, on ne voit que l'interface publique — les détails internes restent privés.
 
-## Concept Fondamental :
+## Concept fondamental
 
-L'encapsulation consiste à encapsuler (cacher) les détails internes d'un objet et à exposer uniquement une interface (méthodes publiques) permettant d'interagir avec cet objet. En d'autres termes, les détails internes (comme les variables d'instance) ne sont pas accessibles directement depuis l'extérieur de l'objet, mais uniquement à travers des méthodes spécifiques.
+L'idée est de regrouper les données (variables) et les méthodes qui les manipulent au sein d'un même objet, tout en contrôlant ce qui est visible de l'extérieur. Les données internes sont déclarées `private`, et on expose uniquement des méthodes publiques (getters, setters) qui permettent d'y accéder de façon contrôlée.
 
-## Principes Clés :
+Ça permet deux choses :
+1. **Protéger l'intégrité des données** — on peut valider les valeurs avant de les accepter
+2. **Masquer les détails d'implémentation** — on peut changer la structure interne sans casser le code qui utilise l'objet
 
-1. **Protection des Données :** Les données internes d'un objet sont cachées et ne peuvent être modifiées qu'à travers des méthodes spécifiques, ce qui permet de protéger l'intégrité des données.
-
-2. **Interface Publique :** Seules les méthodes publiques (interface) sont accessibles depuis l'extérieur de l'objet, offrant une abstraction des détails internes et permettant de contrôler l'accès aux fonctionnalités de l'objet.
-
-3. **Modularité et Réutilisabilité :** L'encapsulation favorise la modularité en regroupant étroitement les données et les opérations qui les manipulent, ce qui facilite la réutilisation du code.
-
-## Exemple :
-
-Voici un exemple simple en Java illustrant l'encapsulation :
+## Exemple
 
 ```java
 public class Person {
     private String name;
     private int age;
 
-    // Constructeur
     public Person(String name, int age) {
         this.name = name;
         this.age = age;
     }
 
-    // Méthodes publiques pour accéder et modifier les données encapsulées
-    public String getName() {
-        return name;
-    }
-
-    public int getAge() {
-        return age;
-    }
+    public String getName() { return name; }
+    public int getAge() { return age; }
 
     public void setAge(int age) {
         if (age >= 0) {
             this.age = age;
         } else {
-            System.out.println("L'âge doit être un nombre positif.");
+            System.out.println("L'âge doit être positif.");
         }
     }
 }
 ```
 
-Dans cet exemple, la classe `Person` encapsule les données `name` et `age` en les déclarant comme privées (utilisation de l'encapsulation) et en fournissant des méthodes publiques (`getName`, `getAge`, `setAge`) pour accéder et modifier ces données de manière contrôlée.
+`name` et `age` sont privés. On ne peut pas faire `person.age = -5` directement — il faut passer par `setAge()`, qui vérifie que la valeur est valide.
 
-L'encapsulation permet ici de protéger les données `name` et `age` en empêchant un accès direct depuis l'extérieur de la classe. Au lieu de cela, l'accès à ces données est contrôlé à travers des méthodes publiques, ce qui garantit que les règles de validation (comme vérifier si l'âge est positif dans `setAge`) sont respectées.
+## Avantages et inconvénients
 
-## Avantages de l'Encapsulation :
+**Avantages :**
+- Protège les données sensibles en empêchant un accès direct
+- Permet de définir des règles de validation sur les modifications
+- Fournit une abstraction des détails internes, ce qui facilite la maintenance et la réutilisabilité
+- Réduit le couplage : le code extérieur ne dépend que de l'interface publique
 
-- **Protection des Données :** Les données sensibles sont cachées et ne peuvent être manipulées qu'à travers des méthodes spécifiques.
-- **Contrôle d'Accès :** L'encapsulation permet de définir des règles d'accès pour manipuler les données, améliorant ainsi la sécurité et la fiabilité du code.
-- **Abstraction :** Fournit une abstraction des détails internes, ce qui facilite la maintenance, la réutilisabilité et la collaboration dans le développement logiciel.
+**Inconvénients :**
+- Peut alourdir le code avec beaucoup de getters/setters (surtout si on ne fait que passer les valeurs sans logique)
+- Un excès d'encapsulation peut rendre le code plus verbeux sans apporter de valeur réelle
+- Nécessite de bien réfléchir à ce qui doit être public et ce qui doit rester privé
 
-En conclusion, l'encapsulation est un principe important de la POO qui contribue à la création de systèmes logiciels modulaires, sécurisés et robustes en cachant les détails internes et en exposant uniquement une interface contrôlée pour interagir avec les objets.
+## Sans ce principe
+
+Sans encapsulation, n'importe qui peut mettre n'importe quoi :
+
+```java
+class BankAccount {
+    public double balance;
+    public String owner;
+}
+
+BankAccount account = new BankAccount();
+account.balance = -5000;  // Solde négatif — rien ne l'empêche
+account.owner = "";       // Propriétaire vide — pas de validation
+```
+
+N'importe quel bout de code peut mettre le solde à -5000 ou vider le nom du propriétaire. Il n'y a aucune règle métier, aucun contrôle. Le jour où on veut ajouter une validation, il faut retrouver tous les endroits qui modifient `balance` directement.
+
+Avec l'encapsulation, `balance` est privé et passe par `withdraw()` / `deposit()` qui vérifient les règles. Impossible de contourner la validation.

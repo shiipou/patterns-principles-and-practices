@@ -1,51 +1,65 @@
 # Practices : Code Reviewing
 
-La revue de code (ou code reviewing) est une pratique essentielle dans le développement logiciel qui consiste à passer en revue le code source écrit par un développeur afin d'identifier et de corriger les erreurs, d'améliorer la qualité du code et de favoriser les bonnes pratiques de programmation. Cette activité implique généralement un examen approfondi du code par un pair ou une équipe de pairs qualifiés.
+La code review, c'est quand un ou plusieurs développeurs relisent le code d'un collègue avant qu'il soit mergé. L'objectif n'est pas de chercher la petite bête, mais de détecter des bugs, d'améliorer la qualité du code, et de partager les connaissances dans l'équipe.
 
-## Objectifs de la Revue de Code :
+## Concept fondamental
 
-1. **Détection d'Erreurs :** Identifier et corriger les bugs, les défauts de logique ou les problèmes de performance dans le code.
+La review sert quatre objectifs principaux :
+1. **Détection d'erreurs** — identifier les bugs, défauts de logique ou problèmes de performance
+2. **Qualité du code** — s'assurer que le code est bien structuré, lisible et conforme aux normes de l'équipe
+3. **Partage de connaissances** — tout le monde reste au courant de ce qui se passe dans le projet
+4. **Validation fonctionnelle** — vérifier que le code implémente correctement les spécifications
 
-2. **Amélioration de la Qualité :** S'assurer que le code est bien structuré, lisible, maintenable et conforme aux normes de codage de l'équipe.
+## Exemple
 
-3. **Apprentissage et Partage de Connaissances :** Favoriser l'apprentissage et le partage des bonnes pratiques entre les membres de l'équipe.
+Le processus classique :
+1. Un développeur soumet son code (pull request / merge request)
+2. Un ou plusieurs pairs relisent ligne par ligne
+3. Ils laissent des commentaires : bugs potentiels, suggestions d'amélioration, questions
+4. Le développeur corrige et répond
+5. Une fois les retours pris en compte, le code est approuvé et mergé
 
-4. **Validation des Spécifications :** S'assurer que le code implémente correctement les spécifications et les exigences du projet.
+Ce qu'on cherche pendant une review :
+- Des bugs ou des cas non gérés
+- Du code difficile à comprendre ou à maintenir
+- Des violations des conventions de l'équipe
+- Des problèmes de performance ou de sécurité
+- De la duplication qui pourrait être factorisée
 
-## Processus de Revue de Code :
+Bonnes habitudes :
+- Rester constructif : on critique le code, pas la personne
+- Proposer des solutions plutôt que pointer des problèmes
+- Faire des reviews régulièrement — ne pas laisser les PRs traîner
+- Impliquer différents membres de l'équipe pour diversifier les points de vue
 
-Le processus de revue de code implique généralement les étapes suivantes :
+## Avantages et inconvénients
 
-1. **Sélection du Code à Examiner :** Le code soumis pour examen est généralement une nouvelle fonctionnalité, une correction de bug ou une modification significative.
+**Avantages :**
+- Détection précoce des problèmes avant qu'ils ne deviennent coûteux
+- Améliore la lisibilité, la cohérence et la robustesse du code
+- Favorise l'apprentissage et le partage de connaissances dans l'équipe
+- Renforce l'esprit d'équipe et la responsabilité collective
 
-2. **Examen par les Pairs :** Un ou plusieurs membres de l'équipe passent en revue le code, en examinant chaque ligne de code pour identifier les problèmes potentiels.
+**Inconvénients :**
+- Prend du temps, surtout si les PRs sont volumineuses
+- Peut devenir un goulot d'étranglement si les reviews traînent
+- Risque de frictions si les commentaires ne sont pas formulés avec tact
+- Peut être superficiel si le reviewer manque de contexte
 
-3. **Identification des Problèmes :** Les revues de code mettent souvent l'accent sur la détection d'erreurs, de bugs, de violations des normes de codage, de problèmes de performance ou de logique, etc.
+## Sans cette pratique
 
-4. **Fourniture de Commentaires :** Les examinateurs laissent des commentaires détaillés sur le code, fournissant des suggestions d'amélioration, des corrections et des explications.
+Sans code review, ce genre de bug passe directement en production :
 
-5. **Discussion et Correction :** Le développeur original discute des commentaires reçus, effectue les corrections nécessaires et apporte des améliorations au code.
+```java
+public void transferMoney(Account from, Account to, double amount) {
+    from.setBalance(from.getBalance() - amount);
+    to.setBalance(to.getBalance() + amount);
+    // Pas de vérification de solde suffisant
+    // Pas de transaction — si le serveur crash entre les deux lignes,
+    // l'argent disparaît du premier compte sans arriver sur le second
+}
+```
 
-6. **Approbation Finale :** Une fois les modifications apportées, le code est à nouveau examiné pour s'assurer que les problèmes ont été résolus et que le code est prêt à être fusionné dans le dépôt principal.
+Un reviewer aurait immédiatement pointé l'absence de vérification de solde et le manque de transaction. Sans review, un seul développeur décide de la qualité du code, et les mauvaises habitudes s'installent sans que personne ne les voie.
 
-## Bonnes Pratiques de Revue de Code :
-
-- **Régularité :** Planifiez des revues de code régulières tout au long du développement pour garantir la qualité du code à chaque étape.
-
-- **Constructivité :** Fournissez des commentaires constructifs et respectueux pour encourager l'apprentissage et l'amélioration continue.
-
-- **Utilisation d'Outils :** Utilisez des outils de revue de code automatisés pour identifier les problèmes potentiels tels que les violations de normes de codage, les erreurs de syntaxe, etc.
-
-- **Impliquez les Pairs :** Impliquez plusieurs membres de l'équipe dans les revues de code pour obtenir différents points de vue et assurer une meilleure qualité.
-
-## Avantages de la Revue de Code :
-
-- **Détection Précoce des Problèmes :** Permet d'identifier les problèmes avant qu'ils ne deviennent des bugs coûteux à corriger.
-
-- **Amélioration de la Qualité :** Favorise des pratiques de codage cohérentes, une meilleure lisibilité du code et une architecture plus robuste.
-
-- **Apprentissage Continu :** Favorise l'apprentissage et le partage des connaissances au sein de l'équipe.
-
-- **Renforcement de l'Esprit d'Équipe :** Encourage la collaboration et renforce le sentiment d'appartenance à l'équipe.
-
-En résumé, la revue de code est une pratique essentielle pour assurer la qualité et la robustesse du code dans le développement logiciel. Elle favorise la détection précoce des erreurs, l'amélioration de la qualité du code et le partage des bonnes pratiques au sein de l'équipe de développement.
+La code review n'est pas qu'un filet de sécurité : c'est aussi le moment où l'équipe partage ses connaissances et reste alignée sur les pratiques.

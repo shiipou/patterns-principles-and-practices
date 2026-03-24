@@ -1,69 +1,79 @@
 # Principe : Open/Closed
 
-Le principe Open/Closed est un concept fondamental de conception logicielle qui promeut la conception de systèmes logiciels de manière à ce qu'ils soient ouverts à l'extension (Open) mais fermés à la modification (Closed). Ce principe encourage à concevoir des composants logiciels de manière à pouvoir ajouter de nouvelles fonctionnalités ou comportements sans modifier le code existant.
+Un module doit être **ouvert à l'extension** mais **fermé à la modification**. Autrement dit, on doit pouvoir ajouter de nouveaux comportements sans toucher au code existant.
 
-## Concept Fondamental :
+## Concept fondamental
 
-Le principe Open/Closed repose sur l'idée que les entités logicielles telles que les classes, les modules ou les composants doivent être conçues de manière à ce qu'elles puissent être étendues pour prendre en charge de nouvelles fonctionnalités sans nécessiter de modifications dans le code existant. Cela favorise la robustesse, la stabilité et la réutilisabilité du code.
+Le principe repose sur l'utilisation d'abstractions (interfaces, classes abstraites) pour définir des contrats. Les composants sont conçus de manière à ce qu'on puisse les étendre par substitution (ajouter une nouvelle implémentation) sans altérer le comportement existant.
 
-## Principes Clés :
+Le but : réduire le risque de régressions. Si on ne modifie pas le code qui marche, on ne casse rien. Les évolutions se font par ajout, pas par modification.
 
-1. **Extension sans Modification :** Les composants logiciels doivent être conçus de manière à permettre l'ajout de nouvelles fonctionnalités par extension, sans altérer le comportement existant.
+## Exemple
 
-2. **Utilisation de l'Abstraction :** Utiliser des abstractions (interfaces, classes abstraites) pour définir des contrats et permettre aux composants d'être étendus par substitution.
-
-3. **Fermeture aux Modifications :** Éviter de modifier le code existant pour ajouter de nouvelles fonctionnalités, ce qui réduit le risque de régressions et de conflits.
-
-## Exemple :
-
-Imaginons un scénario où une équipe développe un système de paiement en ligne qui prend en charge différents modes de paiement tels que carte de crédit, PayPal, et virement bancaire. Pour appliquer le principe Open/Closed, l'équipe pourrait concevoir le système de paiement de manière à permettre l'ajout de nouveaux modes de paiement sans modifier le code existant.
-
-Voici un exemple simplifié en Java :
+Un système de paiement qui supporte la carte de crédit. Demain on veut ajouter PayPal.
 
 ```java
-// Interface pour définir un mode de paiement
-public interface PaymentMethod {
+interface PaymentMethod {
     void processPayment(double amount);
 }
 
-// Implémentation d'un mode de paiement par carte de crédit
-public class CreditCardPayment implements PaymentMethod {
+class CreditCardPayment implements PaymentMethod {
     public void processPayment(double amount) {
-        System.out.println("Paiement de " + amount + " € effectué par carte de crédit.");
-        // Logique de traitement du paiement par carte de crédit
+        System.out.println("Paiement de " + amount + " € par carte.");
     }
 }
 
-// Classe pour gérer le système de paiement
-public class PaymentProcessor {
-    public void processPayment(PaymentMethod paymentMethod, double amount) {
-        paymentMethod.processPayment(amount);
-    }
-}
-
-// Exemple d'utilisation du PaymentProcessor
-public class Main {
-    public static void main(String[] args) {
-        PaymentProcessor processor = new PaymentProcessor();
-
-        // Utilisation du paiement par carte de crédit
-        PaymentMethod creditCardPayment = new CreditCardPayment();
-        processor.processPayment(creditCardPayment, 100.0);
-
-        // Ajout d'un nouveau mode de paiement (PayPal) sans modifier le code existant
-        // (Open to extension, Closed to modification)
-        PaymentMethod paypalPayment = new PaypalPayment();
-        processor.processPayment(paypalPayment, 50.0);
+class PaymentProcessor {
+    public void processPayment(PaymentMethod method, double amount) {
+        method.processPayment(amount);
     }
 }
 ```
 
-Dans cet exemple, le principe Open/Closed est appliqué en utilisant des interfaces (`PaymentMethod`) pour définir un contrat commun pour les différents modes de paiement. Le `PaymentProcessor` peut traiter n'importe quel mode de paiement en utilisant l'abstraction `PaymentMethod`, ce qui permet d'ajouter de nouveaux modes de paiement (comme PayPal) sans modifier le code du `PaymentProcessor`.
+Pour ajouter PayPal, on crée une nouvelle classe `PaypalPayment implements PaymentMethod`. Le `PaymentProcessor` n'a pas besoin d'être modifié — il fonctionne déjà avec n'importe quelle implémentation de `PaymentMethod`.
 
-## Avantages du Principe Open/Closed :
+```java
+class PaypalPayment implements PaymentMethod {
+    public void processPayment(double amount) {
+        System.out.println("Paiement de " + amount + " € via PayPal.");
+    }
+}
+```
 
-- Réduction du risque de régressions : Les modifications sont limitées aux extensions, pas aux modifications directes du code existant.
-- Amélioration de la réutilisabilité : Les composants peuvent être réutilisés et étendus plus facilement.
-- Favorise une conception orientée vers les abstractions : Encourage l'utilisation de contrats (interfaces, classes abstraites) pour définir des comportements extensibles.
+C'est ça le Open/Closed : le code existant reste intact, on étend le système par ajout.
 
-En conclusion, le principe Open/Closed est un principe important de la conception logicielle qui encourage une architecture flexible et extensible, en permettant l'ajout de nouvelles fonctionnalités sans compromettre l'intégrité du code existant.
+## Avantages et inconvénients
+
+**Avantages :**
+- Réduit le risque de régressions : on n'altère pas le code qui fonctionne
+- Améliore la réutilisabilité : les composants peuvent être étendus facilement
+- Favorise une conception orientée vers les abstractions
+
+**Inconvénients :**
+- Nécessite de prévoir les points d'extension dès la conception initiale
+- Peut mener à une sur-abstraction si on essaie de rendre *tout* extensible
+- Parfois, modifier le code existant est plus simple et plus clair qu'ajouter une couche d'abstraction
+
+## Sans ce principe
+
+Sans Open/Closed, chaque évolution oblige à modifier le code existant :
+
+```java
+class PaymentProcessor {
+    public void process(String type, double amount) {
+        if (type.equals("credit_card")) {
+            // traitement carte
+        } else if (type.equals("paypal")) {
+            // traitement PayPal
+        } else if (type.equals("bitcoin")) {
+            // ajouté la semaine dernière
+        } else if (type.equals("apple_pay")) {
+            // ajouté aujourd'hui
+        }
+    }
+}
+```
+
+Chaque nouveau moyen de paiement modifie cette méthode. On touche du code qui marchait déjà, avec un risque de régression à chaque ajout. Et cette méthode grossit indéfiniment.
+
+Avec le Open/Closed, on ajoute une nouvelle classe `ApplePayPayment implements PaymentMethod` sans toucher à `PaymentProcessor`. Le code existant reste intact.

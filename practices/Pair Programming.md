@@ -1,66 +1,50 @@
-# Practices : Pair Programmings
+# Practices : Pair Programming
 
-Le "Pair Programming" est une pratique de développement logiciel où deux développeurs travaillent ensemble sur le même code, sur la même machine. Dans ce mode de travail collaboratif, l'un des développeurs est responsable de la saisie du code (le "pilote"), tandis que l'autre observe, réfléchit et donne des suggestions en temps réel (l'"observateur" ou "navigateur"). Les rôles peuvent être échangés régulièrement.
+Deux développeurs, un écran, un clavier. L'un code (le "pilote"), l'autre réfléchit et guide (le "navigateur"). On alterne les rôles régulièrement, toutes les 20-30 minutes.
 
-## Objectifs du Pair Programming :
+## Concept fondamental
 
-1. **Amélioration de la Qualité :** Permettre une meilleure conception, détection précoce des bugs et amélioration des standards de codage grâce à la collaboration directe.
+Le pair programming repose sur l'idée que deux cerveaux valent mieux qu'un. Le pilote écrit le code, le navigateur prend du recul, anticipe les problèmes et réfléchit à la direction générale. Cette dynamique produit du code de meilleure qualité avec moins de bugs.
 
-2. **Apprentissage Mutuel :** Favoriser le partage des connaissances et des compétences entre les membres de l'équipe.
+Les formats principaux :
+- **Driver-Navigator** — le classique. Le pilote tape, le navigateur prend du recul et réfléchit à la direction.
+- **Ping-Pong** — un développeur écrit un test, l'autre écrit le code pour le faire passer. Puis on inverse. Ça marche très bien avec du TDD.
 
-3. **Réduction des Erreurs :** Le travail en binôme permet de détecter et de corriger les erreurs plus rapidement.
+## Exemple
 
-4. **Augmentation de la Productivité :** Malgré le travail en équipe, la qualité
+Quand utiliser le pair programming :
+- Sur un problème complexe où deux cerveaux valent mieux qu'un
+- Pour former un junior — le senior navigue, le junior pilote
+- Sur du code critique qui ne doit pas avoir de bugs
+- Pour découvrir une nouvelle partie du codebase avec quelqu'un qui la connaît
 
+Comment bien le faire :
+- Parler en continu : verbaliser ce qu'on fait et pourquoi
+- Alterner les rôles pour que les deux restent engagés
+- Rester focalisé sur la tâche — pas de slack, pas de mails
+- Accepter qu'on ne code pas "deux fois plus vite", mais qu'on produit du code de meilleure qualité avec moins de bugs
 
-## Types de Pair Programming :
+## Avantages et inconvénients
 
-1. **Driver-Navigator (Pilote-observateur) :** Un développeur écrit du code (le pilote) pendant que l'autre observe, réfléchit et donne des suggestions (le navigateur). Les rôles peuvent être échangés régulièrement.
+**Avantages :**
+- Meilleure qualité du code : deux paires d'yeux détectent plus d'erreurs
+- Transfert de connaissances naturel entre les développeurs
+- Réduit le "bus factor" : plusieurs personnes connaissent chaque partie du code
+- Force à verbaliser sa pensée, ce qui clarifie les idées
 
-2. **Ping-Pong Programming :** Chaque développeur écrit un test, puis le partenaire écrit le code nécessaire pour que le test réussisse. Ensuite, les rôles sont inversés.
+**Inconvénients :**
+- Plus coûteux en temps de développeur (deux personnes, une tâche)
+- Peut être épuisant sur de longues périodes
+- Ne fonctionne pas bien si les deux développeurs n'ont pas la bonne dynamique
+- Pas adapté à toutes les tâches (tâches simples et répétitives par ex.)
 
-## Déroulement du Pair Programming :
+## Sans cette pratique
 
-1. **Préparation :** Discuter des objectifs de la session de pair programming et des tâches à accomplir.
+Sans pair programming, un développeur travaille seul sur un problème complexe. Il part dans une direction pendant 3 jours, se rend compte que l'approche est mauvaise, et recommence. Personne n'a vu le problème venir parce que personne ne regardait.
 
-2. **Rotation des Rôles :** Échangez les rôles de pilote et de navigateur toutes les 20-30 minutes pour maintenir l'engagement et l'attention des deux développeurs.
+Résultat classique :
+- Un junior passe une journée sur un bug qu'un senior aurait résolu en 10 minutes
+- Un développeur est le seul à connaître une partie du code — le jour où il part, personne ne peut le maintenir
+- Des bugs subtils passent en production parce qu'une seule personne a pensé au problème
 
-3. **Communication Continue :** Parlez régulièrement pour partager des idées, résoudre des problèmes et maintenir le flux de travail.
-
-4. **Utilisation d'Outils de Collaboration :** Utilisez des outils de partage d'écran, de chat en ligne et de gestion de code pour faciliter la collaboration à distance.
-
-## Bonnes Pratiques du Pair Programming :
-
-1. **Écoute Active :** Les deux développeurs doivent être attentifs aux idées et aux suggestions de leur partenaire.
-
-2. **Rotation des Tâches :** Alternez régulièrement les rôles de pilote et de navigateur pour favoriser l'engagement et l'apprentissage mutuel.
-
-3. **Exploration Conjuguée :** Explorez différentes approches et solutions ensemble avant de décider de la meilleure option.
-
-4. **Restez Focalisé :** Concentrez-vous sur la tâche en cours et évitez les distractions pour maximiser l'efficacité.
-
-## Quand Utiliser le Pair Programming :
-
-1. **Problèmes Complexes :** Pour résoudre des problèmes difficiles qui nécessitent une réflexion approfondie et une expertise technique.
-
-2. **Formation et Mentorat :** Pour favoriser l'apprentissage et le partage des connaissances entre développeurs expérimentés et juniors.
-
-3. **Code Critique :** Pour améliorer la qualité du code en identifiant et en corrigeant les erreurs plus rapidement.
-
-4. **Conception Collaborative :** Pour concevoir et architecturer des solutions logicielles de manière collaborative et efficace.
-
-## Avantages du Pair Programming :
-
-1. **Meilleure Qualité du Code :** Le code produit est souvent de meilleure qualité car il est réfléchi et examiné par deux développeurs.
-
-2. **Moins d'Erreurs :** Les problèmes sont détectés et corrigés plus rapidement grâce à la double vérification constante.
-
-3. **Partage des Connaissances :** Favorise le partage des compétences et des bonnes pratiques entre les membres de l'équipe.
-
-4. **Meilleure Collaboration :** Renforce la collaboration et le travail d'équipe au sein de l'équipe de développement.
-
-5. **Réduction des Risques :** Réduit le risque de développement en isolant les erreurs et en prenant des décisions plus éclairées.
-
-## Conclusion
-
-Le Pair Programming est une pratique puissante pour améliorer les performances et la cohésion de l'équipe de développement, tout en garantissant des solutions logicielles de haute qualité et robustes. En intégrant le Pair Programming dans votre processus de développement, vous favoriserez une culture de collaboration et d'excellence au sein de votre équipe. Cependant, il nécessite une communication efficace, des rôles clairs et une volonté d'apprendre et de partager entre les membres de l'équipe.
+Le pair programming ne rend pas "deux fois plus rapide", mais le code produit a moins de bugs, l'équipe partage les connaissances, et les mauvaises approches sont détectées avant d'y avoir investi trop de temps.

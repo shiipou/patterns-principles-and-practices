@@ -1,35 +1,56 @@
 # Principe : Separation of Concerns
 
-Le principe de Séparation des Préoccupations (SoC) est un concept de conception logicielle qui encourage à diviser un système en différentes parties distinctes, chacune étant responsable d'un aspect spécifique ou d'une préoccupation particulière. Ce principe vise à améliorer la maintenabilité, la modularité et la réutilisabilité du code en isolant les différentes fonctionnalités ou responsabilités dans des composants séparés.
+Chaque partie du code devrait s'occuper d'un seul sujet. L'affichage ne devrait pas connaître la logique métier. La logique métier ne devrait pas savoir comment les données sont stockées. Chaque "préoccupation" vit dans son propre coin.
 
-## Concept Fondamental :
+## Concept fondamental
 
-Le principe de Séparation des Préoccupations repose sur l'idée de découpler les différentes responsabilités d'un système afin que chaque composant puisse se concentrer sur un aspect unique et spécifique sans se préoccuper des détails internes des autres composants. Cela favorise la clarté, la flexibilité et la facilité de modification du code.
+Le principe repose sur l'idée de découpler les différentes responsabilités d'un système pour que chaque composant puisse se concentrer sur un aspect unique. On réduit les dépendances entre les modules pour favoriser le découplage et la flexibilité, et on s'assure que chaque module a une responsabilité claire, sans chevauchement de fonctionnalités.
 
-## Principes Clés :
+Ce découpage n'est pas réservé aux grosses architectures. Même dans un petit projet, séparer la logique dans des fonctions ou des fichiers dédiés plutôt que tout mélanger dans un seul fichier, c'est déjà appliquer la séparation des préoccupations.
 
-1. **Modularité :** Diviser le système en modules ou composants distincts, chacun étant responsable d'une préoccupation spécifique.
+## Exemple
 
-2. **Indépendance :** Réduire les dépendances entre les différents modules pour favoriser le découplage et la flexibilité.
+Dans une appli web, on sépare généralement en trois couches :
+- **Présentation** — l'interface utilisateur, l'affichage, les interactions
+- **Logique métier** — les règles du domaine, les calculs, les validations
+- **Accès aux données** — les requêtes en base, le stockage, la persistance
 
-3. **Cohérence :** Assurer que chaque module a une responsabilité claire et cohérente, sans chevauchement de fonctionnalités.
+Si la façon dont on affiche un prix change, seule la couche présentation bouge. Si les règles de calcul de TVA changent, seule la couche métier est concernée. Si on migre de PostgreSQL à MongoDB, seule la couche données est impactée.
 
-## Exemple :
+## Avantages et inconvénients
 
-Imaginons un scénario où une équipe développe une application de commerce électronique. Pour appliquer le principe de Séparation des Préoccupations, l'équipe pourrait diviser l'application en différents modules ou couches responsables de différentes tâches :
+**Avantages :**
+- Facilite la compréhension du code en isolant les responsabilités
+- Les modules peuvent être réutilisés dans différents contextes
+- Les changements dans une préoccupation n'affectent pas les autres parties du système
+- Chaque partie peut être développée, testée et modifiée indépendamment
 
-1. **Couche de Présentation (Interface Utilisateur) :** Responsable de l'interaction avec l'utilisateur, l'affichage des données et la gestion des événements.
+**Inconvénients :**
+- Ajoute de la structure et des fichiers, ce qui peut sembler lourd sur de petits projets
+- Peut mener à un découpage excessif si on sépare des choses qui sont naturellement liées
+- La communication entre couches nécessite des interfaces claires
 
-2. **Couche Métier (Logique Métier) :** Responsable de la logique de traitement des données, des règles métier et des opérations spécifiques au domaine.
+## Sans ce principe
 
-3. **Couche d'Accès aux Données (Persistance des Données) :** Responsable de l'accès et de la manipulation des données dans la base de données ou d'autres sources de stockage.
+Sans séparation des préoccupations, tout est mélangé dans la même méthode :
 
-En divisant l'application selon ces couches, chaque partie du système se concentre sur des préoccupations distinctes et peut être développée, testée et modifiée de manière indépendante, ce qui facilite la maintenance et l'évolution de l'application.
+```java
+public String handleRequest(HttpRequest request) {
+    // Logique métier
+    double price = getProductPrice(request.getParam("id"));
+    double tax = price * 0.20;
+    double total = price + tax;
 
-## Avantages de la Séparation des Préoccupations :
+    // Accès base de données
+    Connection conn = DriverManager.getConnection("jdbc:mysql://...");
+    PreparedStatement stmt = conn.prepareStatement("INSERT INTO orders ...");
+    stmt.executeUpdate();
 
-- Facilité de compréhension : Les responsabilités distinctes facilitent la compréhension du code.
-- Réutilisabilité : Les modules peuvent être réutilisés dans différents contextes ou applications.
-- Évolutivité : Les changements dans une préoccupation n'affectent pas les autres parties du système.
+    // Génération HTML
+    return "<html><body><h1>Total: " + total + " €</h1></body></html>";
+}
+```
 
-En conclusion, le principe de Séparation des Préoccupations est essentiel pour concevoir des systèmes logiciels modulaires, flexibles et maintenables. Il favorise une architecture propre et bien organisée, en réduisant les couplages et en améliorant la gestion des complexités.
+SQL, HTML et logique métier dans la même méthode. Changer l'affichage risque de casser le calcul. Migrer de MySQL à PostgreSQL oblige à toucher du code qui gère aussi le HTML. Et impossible de tester le calcul de TVA sans une connexion à la base.
+
+Avec la séparation des préoccupations, chaque couche (présentation, métier, données) vit dans ses propres classes. On peut modifier l'une sans impacter les autres.
