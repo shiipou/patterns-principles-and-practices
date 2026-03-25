@@ -74,6 +74,3 @@ Avec de bons noms, le code se lit comme une phrase et les commentaires deviennen
 - [Single Responsibility](../principles/Single%20Responsibility.md) — si tu ne trouves pas un bon nom pour ta classe, c'est qu'elle fait trop de choses. Les noms vagues (`Manager`, `Helper`, `Utils`) sont un signal d'alarme : la classe a probablement trop de responsabilités.
 - [Convention over configuration](../principles/Convention%20over%20configuration.md) — les conventions de nommage (`getUserById`, `isActive`, `OrderService`) sont un cas spécifique de ce principe. Si tout le monde nomme pareil, le code se comprend sans documentation.
 - [Abstraction](../principles/Abstraction.md) — un bon nom abstrait les détails. `sendNotification()` plutôt que `openSmtpConnectionAndSendEmail()`. Le nom révèle le "quoi", pas le "comment".
-
-**Patterns :**
-- Les patterns eux-mêmes sont du naming : appeler une classe `FurnitureFactory` ou `NotifierDecorator` communique immédiatement son rôle à quelqu'un qui connaît les [design patterns](../patterns/).

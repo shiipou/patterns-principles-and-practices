@@ -232,7 +232,6 @@ Avec le Decorator, chaque comportement est une classe indépendante qu'on empile
 **Patterns proches :**
 - [Adapter](Adapter.md) — les deux wrappent un objet, mais le Decorator **garde la même interface** et ajoute du comportement, tandis que l'Adapter **change l'interface** pour la rendre compatible. Le Decorator empile, l'Adapter traduit.
 - [Strategy](Strategy.md) — les deux permettent de varier le comportement, mais le Decorator **empile des couches** (email + SMS + log), tandis que le Strategy **substitue un algorithme entier** (voiture OU vélo). Le Decorator est additif, le Strategy est alternatif.
-- [Facade](Facade.md) — la Facade simplifie un sous-système complexe. Le Builder du Decorator (Fluent API) joue un rôle similaire : il cache la complexité de l'empilement des décorateurs.
 
 **Principes appliqués :**
 - [Single Responsibility](../principles/Single%20Responsibility.md) — chaque décorateur n'a qu'**une seule** responsabilité (email, log, retry...). C'est ce qui rend la composition possible.

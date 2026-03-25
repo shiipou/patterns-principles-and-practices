@@ -89,7 +89,6 @@ Un commentaire obsolète est pire que pas de commentaire — il induit en erreur
 **Principes liés :**
 - [KISS](../principles/Keep%20It%20Simple,%20Stupid%20(KISS).md) — un code simple n'a pas besoin de commentaires. Si tu dois écrire un paragraphe pour expliquer ce que fait un bloc, c'est que le code est trop compliqué — simplifie le code, pas le commentaire.
 - [Abstraction](../principles/Abstraction.md) — une bonne abstraction révèle l'intention sans qu'on ait besoin de commenter. `paymentGateway.charge(amount)` n'a pas besoin de commentaire.
-- [Encapsulation](../principles/Encapsulation.md) — les méthodes bien encapsulées (`withdraw()`, `deposit()`) portent leur intention dans leur nom. Les commentaires servent pour le **pourquoi**, pas le **quoi**.
 
 **Le piège du "commentaire pansement" :**
 Si tu te retrouves à commenter du code pour le rendre compréhensible, applique plutôt [Naming](Naming.md) (meilleurs noms), [Single Responsibility](../principles/Single%20Responsibility.md) (découper la classe) ou [Abstraction](../principles/Abstraction.md) (extraire une méthode bien nommée). Le commentaire doit être le **dernier recours**, pas le premier réflexe.

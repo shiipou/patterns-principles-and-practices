@@ -71,7 +71,5 @@ Mesurer avant d'optimiser — et optimiser au bon endroit.
 - [Spiking](Spiking.md) — quand on hésite entre deux approches d'optimisation (cache vs index vs parallélisme), un spike permet de mesurer rapidement laquelle est la plus efficace.
 - [Code Reviewing](Code%20Reviewing.md) — un reviewer peut repérer des problèmes de performance (N+1, allocations excessives) ou au contraire signaler une optimisation prématurée.
 
-**Patterns utiles pour la performance :**
-- [Singleton](../patterns/Singleton.md) — un pool de connexions ou un cache sont souvent des Singletons (une seule instance partagée).
-- [Facade](../patterns/Facade.md) — une Facade peut agréger plusieurs appels en un seul pour réduire les aller-retours réseau.
+**Pattern utile pour la performance :**
 - [Decorator](../patterns/Decorator.md) — un décorateur de cache peut être ajouté autour d'un service sans modifier le service lui-même.

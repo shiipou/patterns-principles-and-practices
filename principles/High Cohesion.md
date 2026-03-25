@@ -66,8 +66,4 @@ Avec une haute cohésion, chaque classe regroupe des fonctionnalités liées : `
 - [Separation of Concerns](Separation%20of%20Concerns.md) — la séparation des préoccupations pousse vers la haute cohésion. Séparer les préoccupations = regrouper les choses liées ensemble et séparer les choses non liées.
 - [Encapsulation](Encapsulation.md) — un module cohésif encapsule naturellement ses données et ses comportements. La cohésion et l'encapsulation se renforcent mutuellement.
 
-**Patterns qui favorisent la haute cohésion :**
-- [Facade](../patterns/Facade.md) — en regroupant les interactions avec un sous-système dans une seule classe, la Facade maintient une haute cohésion.
-- [Strategy](../patterns/Strategy.md) — chaque stratégie est hautement cohésive : elle ne contient que la logique d'un seul algorithme.
-
 **Point de vigilance :** haute cohésion ne veut pas dire "une méthode par classe". Un `OrderService` peut avoir `createOrder()`, `cancelOrder()`, `getOrderById()` — c'est cohésif car tout tourne autour des commandes. Le problème arrive quand il a aussi `sendEmail()` et `generatePDF()`.

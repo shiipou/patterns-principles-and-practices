@@ -86,7 +86,6 @@ Avec DRY, un seul `PricingService.calculateTotal()` est appelé partout. Un chan
 
 **Patterns qui appliquent DRY :**
 - [Template Method](../patterns/Template%20Method.md) — c'est **le** pattern anti-duplication. Le code commun (`boilWater`, `pourInCup`) vit une seule fois dans la classe parente.
-- [Strategy](../patterns/Strategy.md) — au lieu de dupliquer des `if/else` partout, on factorise chaque algorithme dans sa propre classe.
 
 **Pratiques liées :**
 - [Code Reviewing](../practices/Code%20Reviewing.md) — les reviews sont le meilleur moment pour détecter la duplication. Un reviewer voit souvent des patterns que l'auteur ne remarque plus.

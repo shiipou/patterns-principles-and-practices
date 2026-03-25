@@ -57,8 +57,5 @@ Le pair programming ne rend pas "deux fois plus rapide", mais le code produit a 
 - [Spiking](Spiking.md) — explorer une inconnue technique à deux est souvent plus efficace : un développeur teste, l'autre réfléchit et suggère des pistes.
 - [Solution Sketching](Solution%20Sketching.md) — le pairing commence souvent par un croquis à deux sur un tableau blanc avant de toucher au code.
 
-**Principes renforcés :**
-- Tous les principes bénéficient du pairing. Le navigateur a le recul pour détecter les violations de [KISS](../principles/Keep%20It%20Simple,%20Stupid%20(KISS).md), de [SRP](../principles/Single%20Responsibility.md) ou de [DRY](../principles/Don't%20Repeat%20Yourself%20(DRY).md) que le pilote, absorbé par le code, ne voit plus.
-
 **Pratiques liées :**
 - [Retrospective](Retrospective.md) — la rétro est le bon moment pour ajuster les pratiques de pairing (fréquence, durée, formation des paires).

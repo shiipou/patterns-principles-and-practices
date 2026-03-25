@@ -113,7 +113,6 @@ Avec une Facade, tout ça tient en une ligne : `shoppingFacade.placeOrder(cart, 
 
 **Patterns proches :**
 - [Adapter](Adapter.md) — les deux cachent de la complexité, mais la Facade crée une **nouvelle interface simplifiée** devant un sous-système entier, tandis que l'Adapter fait cohabiter **deux interfaces existantes** incompatibles.
-- [Singleton](Singleton.md) — une Facade est souvent implémentée comme un Singleton, puisqu'on n'a généralement besoin que d'un seul point d'entrée vers un sous-système.
 
 **Principes appliqués :**
 - [Separation of Concerns](../principles/Separation%20of%20Concerns.md) — la Facade sépare le code client de la complexité des sous-systèmes. Le client s'occupe de "quoi faire", la Facade s'occupe de "comment le faire".

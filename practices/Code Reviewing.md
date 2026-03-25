@@ -78,6 +78,3 @@ La code review n'est pas qu'un filet de sécurité : c'est aussi le moment où l
 - [Automated Testing](Automated%20Testing.md) — "où sont les tests ?" est une question que chaque reviewer devrait poser. La review vérifie la présence et la qualité des tests.
 - [Pair Programming](Pair%20Programming.md) — le pair programming est une review en **temps réel**. Il détecte les problèmes encore plus tôt que la review classique (avant même le commit).
 - [Retrospective](Retrospective.md) — si les reviews posent problème (à la traîne, superficielles, conflictuelles), c'est un sujet à aborder en rétro.
-
-**Patterns détectés en review :**
-- Un reviewer peut suggérer l'utilisation d'un [Strategy](../patterns/Strategy.md) au lieu d'une chaîne de `if/else`, ou d'une [Facade](../patterns/Facade.md) pour simplifier un code client trop verbeux. La review est souvent le moment où les patterns émergent.

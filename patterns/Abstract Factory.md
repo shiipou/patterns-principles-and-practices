@@ -132,7 +132,6 @@ Avec l'Abstract Factory, on choisit une factory (`OfficeFactory` ou `HomeFactory
 
 **Patterns proches :**
 - [Factory Method](Factory%20Method.md) — variante plus simple qui ne crée qu'un seul type de produit à la fois. L'Abstract Factory crée des **familles entières** d'objets liés. En pratique, chaque méthode d'une Abstract Factory est souvent un Factory Method.
-- [Strategy](Strategy.md) — même principe de polymorphisme pour éviter les `if/else`, mais appliqué aux algorithmes plutôt qu'à la création d'objets.
 
 **Principes appliqués :**
 - [Open/Closed](../principles/Open%20&%20Closed.md) — on ajoute une nouvelle famille (ex. `GardenFurnitureFactory`) sans modifier le code existant.
